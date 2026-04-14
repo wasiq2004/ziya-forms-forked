@@ -52,21 +52,21 @@ export default function FormHeader({
   embedUrl?: string;
 }) {
   return (
-    <div className="sticky top-0 z-30 border-b border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)]/95 text-[color:var(--text-primary-light)] shadow-sm backdrop-blur dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-secondary)]/90 dark:text-[color:var(--text-primary)]">
+    <div className="sticky top-0 z-30 border-b border-[color:var(--border)] bg-[color:var(--card)]/95 text-[color:var(--foreground)] shadow-sm backdrop-blur /90">
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 flex-wrap items-center gap-3">
             {showBackButton && (
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="rounded-full border border-[color:var(--border-light)] text-[color:var(--text-primary-light)] hover:bg-[color:var(--active-nav-light)]/70 dark:border-white/10 dark:text-white dark:hover:bg-white/10">
+                <Button variant="ghost" size="sm" className="rounded-full border border-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/70 dark:hover:bg-[color:var(--card)]/10">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Dashboard
                 </Button>
               </Link>
             )}
-            <h1 className="truncate text-lg font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)] sm:text-xl">{title}</h1>
+            <h1 className="truncate text-lg font-bold text-[color:var(--foreground)] sm:text-xl">{title}</h1>
             {responsesCount > 0 && (
-              <span className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+              <span className="text-sm text-[color:var(--muted-foreground)]">
                 {responsesCount} {responsesCount === 1 ? 'response' : 'responses'}
               </span>
             )}
@@ -77,7 +77,7 @@ export default function FormHeader({
                 variant="outline"
                 size="sm"
                 onClick={onPublish}
-                className="rounded-full border-[color:var(--brand-primary-light)] text-[color:var(--brand-primary-light)] dark:border-[color:var(--brand-accent)] dark:text-[color:var(--brand-accent)]"
+                className="rounded-full border-[color:var(--primary)] text-[color:var(--primary)]"
                 disabled={isPublishing}
               >
                 {isPublishing ? 'Processing...' : (isPublished ? 'Unpublish' : 'Publish')}

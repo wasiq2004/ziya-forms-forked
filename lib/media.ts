@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { nanoid } from 'nanoid';
+import pool from '@/lib/mysql/connection';
 
 const MEDIA_ROOT = path.join(process.cwd(), 'public', 'uploads');
 
@@ -75,5 +76,101 @@ export async function deleteManagedMediaUrl(url?: string | null) {
     return true;
   } catch {
     return false;
+  }
+}
+
+export async function saveImageToDatabase(
+  file: File,
+  scope: string,
+  entityId: string,
+  entityType: 'user' | 'form'
+) {
+  const connection = await pool.getConnection();
+  try {
+    const mimeType = file.type || 'image/jpeg';
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const imageId = nanoid();
+
+    if (entityType === 'user') {
+      await connection.execute(
+        'UPDATE users SET avatar_data = ?, avatar_mime_type = ? WHERE id = ?',
+        [buffer, mimeType, entityId]
+      );
+    } else if (entityType === 'form') {
+      await connection.execute(
+        'UPDATE forms SET banner_data = ?, banner_mime_type = ? WHERE id = ?',
+        [buffer, mimeType, entityId]
+      );
+    } else if (scope === 'forms/images') {
+      await connection.execute(
+        `INSERT INTO form_images (id, form_id, image_data, mime_type, file_name, file_size)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [imageId, entityId, buffer, mimeType, file.name, file.size]
+      );
+    }
+
+    return `/api/images/${entityType}/${entityId}`;
+  } finally {
+    connection.release();
+  }
+}
+
+export async function getImageFromDatabase(
+  entityId: string,
+  entityType: 'user' | 'form'
+): Promise<{ data: Buffer; mimeType: string } | null> {
+  const connection = await pool.getConnection();
+  try {
+    if (entityType === 'user') {
+      const [rows]: any = await connection.execute(
+        'SELECT avatar_data, avatar_mime_type FROM users WHERE id = ?',
+        [entityId]
+      );
+      if (rows && rows.length > 0 && rows[0].avatar_data) {
+        return {
+          data: rows[0].avatar_data,
+          mimeType: rows[0].avatar_mime_type || 'image/jpeg',
+        };
+      }
+    } else if (entityType === 'form') {
+      const [rows]: any = await connection.execute(
+        'SELECT banner_data, banner_mime_type FROM forms WHERE id = ?',
+        [entityId]
+      );
+      if (rows && rows.length > 0 && rows[0].banner_data) {
+        return {
+          data: rows[0].banner_data,
+          mimeType: rows[0].banner_mime_type || 'image/jpeg',
+        };
+      }
+    }
+    return null;
+  } finally {
+    connection.release();
+  }
+}
+
+export async function deleteImageFromDatabase(
+  entityId: string,
+  entityType: 'user' | 'form'
+) {
+  const connection = await pool.getConnection();
+  try {
+    if (entityType === 'user') {
+      await connection.execute(
+        'UPDATE users SET avatar_data = NULL, avatar_mime_type = NULL WHERE id = ?',
+        [entityId]
+      );
+    } else if (entityType === 'form') {
+      await connection.execute(
+        'UPDATE forms SET banner_data = NULL, banner_mime_type = NULL WHERE id = ?',
+        [entityId]
+      );
+    }
+    return true;
+  } catch {
+    return false;
+  } finally {
+    connection.release();
   }
 }

@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS smtp_settings (
   secure BOOLEAN DEFAULT TRUE,
   from_email VARCHAR(255) NOT NULL,
   from_name VARCHAR(255) NOT NULL,
+  admin_email VARCHAR(255) NOT NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -99,6 +100,20 @@ CREATE TABLE IF NOT EXISTS answers (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (response_id) REFERENCES responses(id) ON DELETE CASCADE,
   FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+
+-- Password Reset OTP table
+CREATE TABLE IF NOT EXISTS password_reset_otp (
+  id VARCHAR(36) PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  otp_code VARCHAR(6) NOT NULL,
+  otp_hash VARCHAR(255) NOT NULL,
+  attempts INT DEFAULT 0,
+  max_attempts INT DEFAULT 3,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_email_active (email, expires_at),
+  INDEX idx_email (email)
 );
 
 -- Indexes for better performance

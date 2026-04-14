@@ -95,7 +95,7 @@ export function UserActionsMenu({
         <button
           type="button"
           onClick={() => setOpen((prev) => !prev)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] bg-[color:var(--card)] text-[color:var(--muted-foreground)] shadow-sm transition hover:bg-[color:var(--background)] dark:hover:bg-slate-800"
           aria-label="Open user actions"
           aria-expanded={open}
         >
@@ -107,30 +107,30 @@ export function UserActionsMenu({
         ? createPortal(
           <div
             ref={menuRef}
-            className="fixed z-[100] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-950"
+            className="fixed z-[100] overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-2xl"
             style={{
               top: menuPosition?.top ?? -9999,
               left: menuPosition?.left ?? -9999,
               minWidth: menuPosition?.minWidth ?? 224,
             }}
           >
-            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-900" onClick={() => { setOpen(false); onView(user); }}>
+            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[color:var(--muted-foreground)] hover:bg-[color:var(--background)] dark:hover:bg-[color:var(--background)]" onClick={() => { setOpen(false); onView(user); }}>
               <Eye className="h-4 w-4" />
               View details
             </button>
-            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-900" onClick={() => { setOpen(false); onEdit(user); }}>
+            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[color:var(--muted-foreground)] hover:bg-[color:var(--background)] dark:hover:bg-[color:var(--background)]" onClick={() => { setOpen(false); onEdit(user); }}>
               <PencilLine className="h-4 w-4" />
               Edit user
             </button>
-            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-900" onClick={() => { setOpen(false); onToggleStatus(user); }}>
+            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[color:var(--muted-foreground)] hover:bg-[color:var(--background)] dark:hover:bg-[color:var(--background)]" onClick={() => { setOpen(false); onToggleStatus(user); }}>
               <Power className="h-4 w-4" />
               {user.status === 'active' ? 'Deactivate user' : 'Activate user'}
             </button>
-            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-900" onClick={() => { setOpen(false); onToggleBillingPlan(user); }}>
+            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[color:var(--muted-foreground)] hover:bg-[color:var(--background)] dark:hover:bg-[color:var(--background)]" onClick={() => { setOpen(false); onToggleBillingPlan(user); }}>
               <BadgeDollarSign className="h-4 w-4" />
               Mark as {user.billingPlan === 'paid' ? 'Free' : 'Paid'}
             </button>
-            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-900" onClick={() => { setOpen(false); onResetPassword(user); }}>
+            <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[color:var(--muted-foreground)] hover:bg-[color:var(--background)] dark:hover:bg-[color:var(--background)]" onClick={() => { setOpen(false); onResetPassword(user); }}>
               <KeyRound className="h-4 w-4" />
               Reset password
             </button>

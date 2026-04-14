@@ -95,28 +95,28 @@ export default function ProfilePage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="min-h-screen bg-[color:var(--bg-primary-light)] px-6 py-8 dark:bg-[color:var(--bg-primary)]">
+      <div className="min-h-screen bg-[color:var(--background)] px-6 py-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-6">
           <div className="flex items-center justify-between">
-            <div className="h-11 w-36 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-            <div className="hidden h-9 w-32 rounded-full bg-slate-200/80 dark:bg-slate-800/80 animate-pulse md:block" />
+            <div className="h-11 w-36 rounded-2xl bg-[color:var(--border)]/80 /80 animate-pulse" />
+            <div className="hidden h-9 w-32 rounded-full bg-[color:var(--border)]/80 /80 animate-pulse md:block" />
           </div>
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="h-52 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
+            <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-sm">
+              <div className="h-52 rounded-2xl bg-[color:var(--border)]/80 /80 animate-pulse" />
               <div className="mt-6 space-y-3">
-                <div className="h-4 w-1/3 rounded bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-                <div className="h-4 w-2/3 rounded bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-                <div className="h-4 w-1/2 rounded bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
+                <div className="h-4 w-1/3 rounded bg-[color:var(--border)]/80 /80 animate-pulse" />
+                <div className="h-4 w-2/3 rounded bg-[color:var(--border)]/80 /80 animate-pulse" />
+                <div className="h-4 w-1/2 rounded bg-[color:var(--border)]/80 /80 animate-pulse" />
               </div>
             </div>
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-sm">
               <div className="space-y-4">
-                <div className="h-6 w-40 rounded bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-                <div className="h-12 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-                <div className="h-12 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-                <div className="h-48 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
-                <div className="h-12 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse" />
+                <div className="h-6 w-40 rounded bg-[color:var(--border)]/80 /80 animate-pulse" />
+                <div className="h-12 rounded-2xl bg-[color:var(--border)]/80 /80 animate-pulse" />
+                <div className="h-12 rounded-2xl bg-[color:var(--border)]/80 /80 animate-pulse" />
+                <div className="h-48 rounded-2xl bg-[color:var(--border)]/80 /80 animate-pulse" />
+                <div className="h-12 rounded-2xl bg-[color:var(--border)]/80 /80 animate-pulse" />
               </div>
             </div>
           </div>
@@ -130,29 +130,29 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[color:var(--bg-primary-light)] text-[color:var(--text-primary-light)] dark:bg-[color:var(--bg-primary)] dark:text-[color:var(--text-primary)]">
+    <div className="min-h-screen bg-[color:var(--background)] text-[color:var(--foreground)]">
       <div className="container mx-auto max-w-6xl px-6 py-8">
         <div className="mb-6 flex items-center justify-between gap-4">
           <Link href="/dashboard">
-            <Button variant="outline" className="gap-2 border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] text-[color:var(--text-primary-light)] hover:bg-[color:var(--active-nav-light)]/60 dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)] dark:text-[color:var(--text-primary)] dark:hover:bg-[color:var(--bg-surface-hover)]">
+            <Button variant="outline" className="gap-2 border-[color:var(--border)] bg-[color:var(--card)] text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/60 dark:hover:bg-[color:var(--muted)]">
               <ArrowLeft className="h-4 w-4" />
               Back to dashboard
             </Button>
           </Link>
-          <div className="hidden items-center gap-2 rounded-full border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--text-secondary-light)] shadow-lg backdrop-blur dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)] dark:text-[color:var(--text-secondary)] md:inline-flex">
+          <div className="hidden items-center gap-2 rounded-full border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--muted-foreground)] shadow-lg backdrop-blur md:inline-flex">
             <Sparkles className="h-3.5 w-3.5" />
             Profile center
           </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <Card className="overflow-hidden border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] p-0 shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
+          <Card className="overflow-hidden border border-[color:var(--border)] bg-[color:var(--card)] p-0 shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur">
             <div
               className="px-8 py-10 text-white"
-              style={{ background: 'linear-gradient(135deg, var(--bg-secondary), var(--brand-primary), var(--brand-accent))' }}
+              style={{ background: 'linear-gradient(135deg, var(--bg-secondary), var(--primary), var(--gradient-end))' }}
             >
               <div className="flex items-center gap-4">
-                <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white/10 shadow-xl ring-1 ring-white/15">
+                <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[color:var(--card)]/10 shadow-xl ring-1 ring-white/15">
                   {profile?.avatar_url && !avatarError ? (
                     <img
                       src={profile.avatar_url}
@@ -175,7 +175,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-4 px-8 py-8">
-              <div className="grid gap-3 text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+              <div className="grid gap-3 text-sm text-[color:var(--muted-foreground)]">
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
                   <span>{profile?.email}</span>
@@ -190,23 +190,23 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-[color:var(--bg-primary-light)] p-4 dark:bg-[color:var(--bg-surface-hover)]">
-                <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--text-muted)] dark:text-[color:var(--text-muted)]">Plan</p>
-                <p className="mt-1 text-lg font-semibold capitalize text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+              <div className="rounded-2xl bg-[color:var(--background)] p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Plan</p>
+                <p className="mt-1 text-lg font-semibold capitalize text-[color:var(--foreground)]">
                   {profile?.billing_plan || 'free'}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-dashed border-[color:var(--border-light)] p-4 text-sm text-[color:var(--text-secondary-light)] dark:border-[color:var(--border-default)] dark:text-[color:var(--text-secondary)]">
+              <div className="rounded-2xl border border-dashed border-[color:var(--border)] p-4 text-sm text-[color:var(--muted-foreground)]">
                 Update your name and picture here. The dashboard header will use this profile automatically.
               </div>
             </div>
           </Card>
 
-          <Card className="overflow-hidden border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
-            <div className="border-b border-[color:var(--border-light)] px-6 py-4 dark:border-[color:var(--border-default)]">
-              <h2 className="text-lg font-semibold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">Edit profile</h2>
-              <p className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">Make your account feel more personal.</p>
+          <Card className="overflow-hidden border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur">
+            <div className="border-b border-[color:var(--border)] px-6 py-4">
+              <h2 className="text-lg font-semibold text-[color:var(--foreground)]">Edit profile</h2>
+              <p className="text-sm text-[color:var(--muted-foreground)]">Make your account feel more personal.</p>
             </div>
 
             <div className="space-y-6 p-6">
@@ -226,34 +226,34 @@ export default function ProfilePage() {
               />
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">Full name</label>
+                <label className="mb-2 block text-sm font-medium text-[color:var(--muted-foreground)]">Full name</label>
                 <input
                   value={profile?.full_name || ''}
                   onChange={(event) => setProfile((current) => current ? { ...current, full_name: event.target.value } : current)}
                   placeholder="Your name"
-                  className="w-full rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-primary-light)] px-4 py-3 text-[color:var(--text-primary-light)] outline-none transition focus:border-[color:var(--brand-primary-light)] focus:bg-white dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface-hover)] dark:text-[color:var(--text-primary)]"
+                  className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--background)] px-4 py-3 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:bg-[color:var(--card)]"
                 />
               </div>
 
-              <div className="grid gap-3 rounded-2xl bg-[color:var(--bg-primary-light)] p-4 text-sm text-[color:var(--text-secondary-light)] dark:bg-[color:var(--bg-surface-hover)] dark:text-[color:var(--text-secondary)]">
+              <div className="grid gap-3 rounded-2xl bg-[color:var(--background)] p-4 text-sm text-[color:var(--muted-foreground)]">
                 <div className="flex items-center justify-between">
                   <span>Email</span>
-                  <span className="font-medium text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{profile?.email}</span>
+                  <span className="font-medium text-[color:var(--foreground)]">{profile?.email}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Status</span>
-                  <span className="font-medium capitalize text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{profile?.status || 'active'}</span>
+                  <span className="font-medium capitalize text-[color:var(--foreground)]">{profile?.status || 'active'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Role</span>
-                  <span className="font-medium capitalize text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{profile?.role || 'user'}</span>
+                  <span className="font-medium capitalize text-[color:var(--foreground)]">{profile?.role || 'user'}</span>
                 </div>
               </div>
 
               <Button
                 onClick={saveProfile}
                 isLoading={isSaving}
-                className="w-full bg-[color:var(--brand-primary-light)] text-white hover:opacity-95 dark:bg-[color:var(--brand-primary)]"
+                className="w-full bg-[color:var(--primary)] text-white hover:opacity-95"
               >
                 Save profile
               </Button>

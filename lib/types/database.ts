@@ -170,6 +170,7 @@ export interface SmtpSettings {
   secure: boolean;
   from_email: string;
   from_name: string;
+  admin_email: string;
   updated_at?: string;
 }
 

@@ -310,22 +310,22 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
   return (
     <div className="space-y-6 py-0">
-        <div className="mb-8 flex flex-col gap-6 rounded-[2rem] border border-white/50 bg-white/70 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur dark:border-slate-800 dark:bg-slate-950/40 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mb-8 flex flex-col gap-6 rounded-[2rem] border border-white/50 bg-[color:var(--card)]/70 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur /40 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600 dark:text-blue-400">Super Admin</p>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">Super Admin</p>
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
               Platform control center
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-slate-600 dark:text-slate-300">
+            <p className="mt-4 max-w-2xl text-base text-[color:var(--muted-foreground)]">
               Monitor growth, review platform usage, and manage every account from a single control surface.
-              {currentUserName ? <span className="ml-1 font-semibold text-slate-900 dark:text-white">Signed in as {currentUserName}.</span> : null}
+              {currentUserName ? <span className="ml-1 font-semibold text-[color:var(--foreground)]">Signed in as {currentUserName}.</span> : null}
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Button
               variant="outline"
-              className="border-slate-300 bg-white/80 text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+              className="border-[color:var(--border)] bg-[color:var(--card)]/80 text-[color:var(--foreground)] shadow-sm"
               onClick={refreshData}
               isLoading={loadingStats || loadingUsers || busyAction}
             >
@@ -346,7 +346,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
         )}
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-200">
+          <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
             {error}
           </div>
         )}
@@ -355,11 +355,11 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
           <KpiCards stats={stats} loading={loadingStats} />
         </div>
 
-        <Card className="mb-6 border border-white/60 bg-white/70 shadow-[0_15px_60px_rgba(15,23,42,0.08)] backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
+        <Card className="mb-6 border border-white/60 bg-[color:var(--card)]/70 shadow-[0_15px_60px_rgba(15,23,42,0.08)] backdrop-blur /40">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">User directory</h2>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <h2 className="text-xl font-bold text-[color:var(--foreground)]">User directory</h2>
+              <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">
                 Search, filter, and take action on any account.
               </p>
             </div>
@@ -387,18 +387,18 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
         {modalMode && activeUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 backdrop-blur-sm">
-            <div className="w-full max-w-2xl rounded-[2rem] border border-white/20 bg-white p-6 shadow-2xl dark:bg-slate-950">
+            <div className="w-full max-w-2xl rounded-[2rem] border border-white/20 bg-[color:var(--card)] p-6 shadow-2xl">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
                     {modalMode === 'edit' ? 'Edit user' : 'User details'}
                   </p>
-                  <h3 className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">{activeUser.name}</h3>
+                  <h3 className="mt-2 text-2xl font-bold text-[color:var(--foreground)]">{activeUser.name}</h3>
                 </div>
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900"
+                  className="rounded-full border border-[color:var(--border)] p-2 text-[color:var(--muted-foreground)] hover:bg-[color:var(--background)] dark:hover:bg-[color:var(--background)]"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -406,60 +406,60 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
               {modalMode === 'view' ? (
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Email</p>
-                    <p className="mt-2 font-medium text-slate-900 dark:text-white">{activeUser.email}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Email</p>
+                    <p className="mt-2 font-medium text-[color:var(--foreground)]">{activeUser.email}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Role</p>
-                    <p className="mt-2 font-medium capitalize text-slate-900 dark:text-white">{activeUser.role.replace('_', ' ')}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Role</p>
+                    <p className="mt-2 font-medium capitalize text-[color:var(--foreground)]">{activeUser.role.replace('_', ' ')}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Plan</p>
-                    <p className="mt-2 font-medium capitalize text-slate-900 dark:text-white">{activeUser.billingPlan}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Plan</p>
+                    <p className="mt-2 font-medium capitalize text-[color:var(--foreground)]">{activeUser.billingPlan}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Status</p>
-                    <p className="mt-2 font-medium text-slate-900 dark:text-white">{activeUser.status}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Status</p>
+                    <p className="mt-2 font-medium text-[color:var(--foreground)]">{activeUser.status}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Created at</p>
-                    <p className="mt-2 font-medium text-slate-900 dark:text-white">{new Date(activeUser.createdAt).toLocaleString()}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Created at</p>
+                    <p className="mt-2 font-medium text-[color:var(--foreground)]">{new Date(activeUser.createdAt).toLocaleString()}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Forms</p>
-                    <p className="mt-2 font-medium text-slate-900 dark:text-white">{activeUser.formsCount}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Forms</p>
+                    <p className="mt-2 font-medium text-[color:var(--foreground)]">{activeUser.formsCount}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/60">
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Embedded forms</p>
-                    <p className="mt-2 font-medium text-slate-900 dark:text-white">{activeUser.embeddedFormsCount}</p>
+                  <div className="rounded-2xl bg-[color:var(--background)] p-4 /60">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">Embedded forms</p>
+                    <p className="mt-2 font-medium text-[color:var(--foreground)]">{activeUser.embeddedFormsCount}</p>
                   </div>
                 </div>
               ) : (
                 <div className="grid gap-4">
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Name</span>
+                    <span className="text-sm font-medium text-[color:var(--foreground)]">Name</span>
                     <input
                       value={editingState?.name || ''}
                       onChange={(e) => setEditingState((prev) => prev ? { ...prev, name: e.target.value } : prev)}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                      className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none focus:border-blue-500"
                     />
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</span>
+                    <span className="text-sm font-medium text-[color:var(--foreground)]">Email</span>
                     <input
                       value={editingState?.email || ''}
                       onChange={(e) => setEditingState((prev) => prev ? { ...prev, email: e.target.value } : prev)}
-                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                      className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none focus:border-blue-500"
                     />
                   </label>
                   <div className="grid gap-4 md:grid-cols-2">
                     <label className="grid gap-2">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Role</span>
+                      <span className="text-sm font-medium text-[color:var(--foreground)]">Role</span>
                       <select
                         value={editingState?.role || 'user'}
                         onChange={(e) => setEditingState((prev) => prev ? { ...prev, role: e.target.value } : prev)}
-                        className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                        className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none focus:border-blue-500"
                       >
                         <option value="user">user</option>
                         <option value="admin">admin</option>
@@ -467,11 +467,11 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
                       </select>
                     </label>
                     <label className="grid gap-2">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Status</span>
+                      <span className="text-sm font-medium text-[color:var(--foreground)]">Status</span>
                       <select
                         value={editingState?.status || 'active'}
                         onChange={(e) => setEditingState((prev) => prev ? { ...prev, status: e.target.value as 'active' | 'inactive' } : prev)}
-                        className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                        className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none focus:border-blue-500"
                       >
                         <option value="active">active</option>
                         <option value="inactive">inactive</option>
@@ -482,7 +482,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
               )}
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                <Button variant="outline" onClick={closeModal} className="border-slate-300 dark:border-slate-700">
+                <Button variant="outline" onClick={closeModal} className="border-[color:var(--border)]">
                   Cancel
                 </Button>
                 {modalMode === 'edit' && (

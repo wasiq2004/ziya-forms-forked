@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import { Quicksand } from "next/font/google";
-import "./globals.css";
-import { SessionProvider } from "@/components/auth/SessionProvider";
-import { ThemeProvider } from "@/components/ui/ThemeProvider";
-import { APP_NAME, APP_DESCRIPTION } from "@/lib/config";
-import Header from "@/components/ui/Header";
+import type { Metadata } from"next";
+import { Quicksand } from"next/font/google";
+import"./globals.css";
+import { SessionProvider } from"@/components/auth/SessionProvider";
+import { ThemeProvider } from"@/components/ui/ThemeProvider";
+import { APP_NAME, APP_DESCRIPTION } from"@/lib/config";
+import Header from"@/components/ui/Header";
 
 const quicksand = Quicksand({
-  variable: "--font-quicksand",
+  variable:"--font-quicksand",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300","400","500","600","700"],
 });
 
 export const metadata: Metadata = {
-  title: "Ziya Forms",
-  description: "Ziya Forms",
+  title:"Ziya Forms",
+  description:"Ziya Forms",
 };
 
 export default function RootLayout({

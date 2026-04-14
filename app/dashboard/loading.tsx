@@ -2,9 +2,9 @@ import { Skeleton } from '@/components/ui/Skeleton';
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-[color:var(--bg-primary-light)] px-6 py-8 dark:bg-[color:var(--bg-primary)]">
+    <div className="min-h-screen bg-[color:var(--background)] px-6 py-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <div className="rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] p-6 dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
+        <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-3">
               <Skeleton className="h-5 w-28" />

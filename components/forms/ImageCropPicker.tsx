@@ -14,6 +14,7 @@ type ImageCropPickerProps = {
   aspectRatio: number;
   buttonLabel: string;
   uploadScope: 'forms/banners' | 'users/avatars';
+  entityId?: string;
   emptyLabel?: string;
   cropTitle?: string;
   cropHint?: string;
@@ -31,6 +32,7 @@ export function ImageCropPicker({
   aspectRatio,
   buttonLabel,
   uploadScope,
+  entityId,
   emptyLabel = 'No image selected yet.',
   cropTitle = 'Adjust image',
   cropHint = 'Drag to move, use the slider to zoom, then save.',
@@ -234,6 +236,9 @@ export function ImageCropPicker({
       const payload = new FormData();
       payload.append('file', new File([blob], 'crop.jpg', { type: 'image/jpeg' }));
       payload.append('scope', uploadScope);
+      if (entityId) {
+        payload.append('entityId', entityId);
+      }
       if (previewImage) {
         payload.append('previousUrl', previewImage);
       }
@@ -270,13 +275,13 @@ export function ImageCropPicker({
   return (
     <div className={className}>
       <div className="mb-3">
-        <p className="text-sm font-semibold text-slate-900 dark:text-white">{label}</p>
-        {description && <p className="text-sm text-slate-500 dark:text-slate-400">{description}</p>}
+        <p className="text-sm font-semibold text-[color:var(--foreground)]">{label}</p>
+        {description && <p className="text-sm text-[color:var(--muted-foreground)]">{description}</p>}
       </div>
 
       <div
         className={[
-          'relative overflow-hidden border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/60',
+          'relative overflow-hidden border border-dashed border-[color:var(--border)]  bg-[color:var(--background)]/60',
           previewClassName,
         ].join(' ')}
         style={{ aspectRatio }}
@@ -284,7 +289,7 @@ export function ImageCropPicker({
         {previewImage ? (
           <img src={previewImage} alt={label} className="h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center px-4 text-center text-sm text-slate-500 dark:text-slate-400">
+          <div className="flex h-full w-full items-center justify-center px-4 text-center text-sm text-[color:var(--muted-foreground)]">
             {emptyLabel}
           </div>
         )}
@@ -317,16 +322,16 @@ export function ImageCropPicker({
 
       {isOpen && sourceImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+          <div className="w-full max-w-4xl overflow-hidden rounded-3xl bg-[color:var(--card)] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[color:var(--border)] px-6 py-4">
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{cropTitle}</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">{cropHint}</p>
+                <h3 className="text-lg font-semibold text-[color:var(--foreground)]">{cropTitle}</h3>
+                <p className="text-sm text-[color:var(--muted-foreground)]">{cropHint}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white"
+                className="rounded-full p-2 text-[color:var(--muted-foreground)] transition hover:bg-[color:var(--background)] hover:text-[color:var(--foreground)] dark:hover:bg-slate-800 dark:hover:text-white"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -336,7 +341,7 @@ export function ImageCropPicker({
               <div>
                 <div
                   ref={viewportRef}
-                  className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-inner ring-1 ring-slate-200 dark:ring-slate-800"
+                  className="relative overflow-hidden rounded-2xl bg-slate-950 shadow-inner ring-1 ring-slate-200"
                   style={{ aspectRatio, touchAction: 'none' }}
                   onPointerDown={handlePointerDown}
                   onPointerMove={handlePointerMove}
@@ -358,18 +363,18 @@ export function ImageCropPicker({
               </div>
 
               <div className="space-y-5">
-                <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/70">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+                <div className="rounded-2xl bg-[color:var(--background)] p-4 /70">
+                  <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[color:var(--foreground)]">
                     <Move className="h-4 w-4" />
                     Position
                   </div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-[color:var(--muted-foreground)]">
                     Drag the image left or right until the important part sits inside the banner frame.
                   </p>
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                  <label className="mb-2 block text-sm font-medium text-[color:var(--foreground)]">
                     Zoom
                   </label>
                   <input

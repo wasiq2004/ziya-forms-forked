@@ -141,9 +141,9 @@ export default function DashboardPage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="min-h-screen bg-[color:var(--bg-primary-light)] px-6 py-8 dark:bg-[color:var(--bg-primary)]">
+      <div className="min-h-screen bg-[color:var(--background)] px-6 py-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
-          <div className="rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] p-6 dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
+          <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-6">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-3">
                 <Skeleton className="h-5 w-28" />
@@ -169,25 +169,25 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[color:var(--bg-primary-light)] text-[color:var(--text-primary-light)] dark:bg-[color:var(--bg-primary)] dark:text-[color:var(--text-primary)]">
+    <div className="min-h-screen bg-[color:var(--background)] text-[color:var(--foreground)]">
       <div className="container mx-auto px-6 py-8">
-        <div className="mb-8 overflow-hidden rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] shadow-sm dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
+        <div className="mb-8 overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-sm">
           <div
             className="h-1 w-full"
             style={{
-              background: 'linear-gradient(90deg, var(--brand-primary), var(--brand-accent), var(--accent-purple))',
+              background: 'linear-gradient(90deg, var(--primary), var(--gradient-end), var(--accent-purple))',
             }}
           />
           <div className="p-8">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--active-nav-light)] bg-[color:var(--active-nav-light)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--brand-primary-light)] dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface-hover)] dark:text-[color:var(--brand-accent)]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--muted)] bg-[color:var(--muted)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--primary)]">
                 Workspace
               </div>
-              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+              <h1 className="mt-4 text-4xl font-bold tracking-tight text-[color:var(--foreground)]">
                 Your Forms
               </h1>
-              <p className="mt-3 text-lg text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+              <p className="mt-3 text-lg text-[color:var(--muted-foreground)]">
                 Create, edit, and manage forms from one clean workspace.
               </p>
             </div>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
             <Button
               onClick={createNewForm}
               isLoading={isCreating}
-              className="flex items-center gap-2 bg-[color:var(--brand-primary-light)] px-6 py-3 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:opacity-95 hover:shadow-xl hover:scale-105 dark:bg-[color:var(--brand-primary)]"
+              className="flex items-center gap-2 bg-[color:var(--primary)] px-6 py-3 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:opacity-95 hover:shadow-xl hover:scale-105"
             >
               <Plus className="h-5 w-5" />
               New Form
@@ -203,17 +203,17 @@ export default function DashboardPage() {
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl bg-[color:var(--bg-surface-light)] p-4 shadow-sm ring-1 ring-[color:var(--border-light)] dark:bg-[color:var(--bg-surface-hover)] dark:ring-[color:var(--border-default)]">
-              <p className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">Forms</p>
-              <p className="mt-1 text-2xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{forms.length}</p>
+            <div className="rounded-2xl bg-[color:var(--card)] p-4 shadow-sm ring-1 ring-[color:var(--border)]">
+              <p className="text-sm text-[color:var(--muted-foreground)]">Forms</p>
+              <p className="mt-1 text-2xl font-bold text-[color:var(--foreground)]">{forms.length}</p>
             </div>
-            <div className="rounded-2xl bg-[color:var(--bg-surface-light)] p-4 shadow-sm ring-1 ring-[color:var(--border-light)] dark:bg-[color:var(--bg-surface-hover)] dark:ring-[color:var(--border-default)]">
-              <p className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">Templates</p>
-              <p className="mt-1 text-2xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{templates.length}</p>
+            <div className="rounded-2xl bg-[color:var(--card)] p-4 shadow-sm ring-1 ring-[color:var(--border)]">
+              <p className="text-sm text-[color:var(--muted-foreground)]">Templates</p>
+              <p className="mt-1 text-2xl font-bold text-[color:var(--foreground)]">{templates.length}</p>
             </div>
-            <div className="rounded-2xl bg-[color:var(--bg-surface-light)] p-4 shadow-sm ring-1 ring-[color:var(--border-light)] dark:bg-[color:var(--bg-surface-hover)] dark:ring-[color:var(--border-default)]">
-              <p className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">Published</p>
-              <p className="mt-1 text-2xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{publishedFormsCount}</p>
+            <div className="rounded-2xl bg-[color:var(--card)] p-4 shadow-sm ring-1 ring-[color:var(--border)]">
+              <p className="text-sm text-[color:var(--muted-foreground)]">Published</p>
+              <p className="mt-1 text-2xl font-bold text-[color:var(--foreground)]">{publishedFormsCount}</p>
             </div>
           </div>
           </div>
@@ -225,19 +225,19 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-20"
           >
-            <div className="w-24 h-24 bg-[color:var(--active-nav-light)] dark:bg-[color:var(--bg-surface-hover)] rounded-full flex items-center justify-center mx-auto mb-6">
-              <FileText className="w-12 h-12 text-[color:var(--brand-primary-light)] dark:text-[color:var(--brand-accent)]" />
+            <div className="w-24 h-24 bg-[color:var(--muted)] rounded-full flex items-center justify-center mx-auto mb-6">
+              <FileText className="w-12 h-12 text-[color:var(--primary)]" />
             </div>
-            <h3 className="text-2xl font-bold mb-3 text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+            <h3 className="text-2xl font-bold mb-3 text-[color:var(--foreground)]">
               No forms yet
             </h3>
-            <p className="text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)] mb-8 max-w-md mx-auto">
+            <p className="text-[color:var(--muted-foreground)] mb-8 max-w-md mx-auto">
               Create your first form to get started with collecting responses and analyzing data.
             </p>
             <Button
               onClick={createNewForm}
               isLoading={isCreating}
-              className="bg-[color:var(--brand-primary-light)] hover:opacity-95 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 dark:bg-[color:var(--brand-primary)]"
+              className="bg-[color:var(--primary)] hover:opacity-95 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <Plus className="w-5 h-5 mr-2" />
               Create Your First Form
@@ -249,37 +249,37 @@ export default function DashboardPage() {
               <Card
               key={form.id}
               hover
-                className="relative bg-[color:var(--bg-surface-light)] dark:bg-[color:var(--bg-surface)] border border-[color:var(--border-light)] dark:border-[color:var(--border-default)] shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                className="relative bg-[color:var(--card)] border border-[color:var(--border)] shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-bold line-clamp-1 text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+                    <h3 className="text-lg font-bold line-clamp-1 text-[color:var(--foreground)]">
                       {form.title}
                     </h3>
                     {form.is_published && (
-                      <span className="px-3 py-1 text-xs rounded-full bg-[color:var(--status-success-light)] text-[color:var(--status-success-text-light)] dark:bg-[color:var(--status-success)] dark:text-white font-medium">
+                      <span className="px-3 py-1 text-xs rounded-full bg-[color:var(--status-success-light)] text-[color:var(--status-success-text-light)] font-medium">
                         Published
                       </span>
                     )}
                   </div>
                   {form.description && (
-                    <p className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)] line-clamp-2 mb-4">
+                    <p className="text-sm text-[color:var(--muted-foreground)] line-clamp-2 mb-4">
                       {form.description}
                     </p>
                   )}
-                  <p className="text-xs text-[color:var(--text-muted)] dark:text-[color:var(--text-muted)] mb-4">
+                  <p className="text-xs text-[color:var(--muted-foreground)] mb-4">
                     Created {new Date(form.created_at).toLocaleDateString()}
                   </p>
 
                   <div className="grid grid-cols-2 gap-3">
                     <Link href={`/form/${form.id}/edit`}>
-                      <Button variant="outline" size="sm" className="w-full border-[color:var(--border-light)] dark:border-[color:var(--border-default)] hover:bg-[color:var(--active-nav-light)]/60 dark:hover:bg-[color:var(--bg-surface-hover)] transition-colors">
+                      <Button variant="outline" size="sm" className="w-full border-[color:var(--border)] hover:bg-[color:var(--muted)]/60 dark:hover:bg-[color:var(--muted)] transition-colors">
                         <Edit className="w-4 h-4 mr-1" />
                         Edit
                       </Button>
                     </Link>
                     <Link href={`/responses/${form.id}`}>
-                      <Button variant="outline" size="sm" className="w-full border-[color:var(--border-light)] dark:border-[color:var(--border-default)] hover:bg-[color:var(--active-nav-light)]/60 dark:hover:bg-[color:var(--bg-surface-hover)] transition-colors">
+                      <Button variant="outline" size="sm" className="w-full border-[color:var(--border)] hover:bg-[color:var(--muted)]/60 dark:hover:bg-[color:var(--muted)] transition-colors">
                         <BarChart3 className="w-4 h-4 mr-1" />
                         Responses
                       </Button>
@@ -287,14 +287,14 @@ export default function DashboardPage() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="w-full text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)] hover:bg-[color:var(--active-nav-light)]/60 dark:hover:bg-[color:var(--bg-surface-hover)] transition-colors"
+                      className="w-full text-[color:var(--muted-foreground)] hover:bg-[color:var(--muted)]/60 dark:hover:bg-[color:var(--muted)] transition-colors"
                       onClick={() => copyFormLink(form.id)}
                     >
                       <Copy className="w-4 h-4 mr-1" />
                       Copy Link
                     </Button>
                     <Link href={`/form/${form.id}`} target="_blank">
-                      <Button variant="ghost" size="sm" className="w-full text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)] hover:bg-[color:var(--active-nav-light)]/60 dark:hover:bg-[color:var(--bg-surface-hover)] transition-colors">
+                      <Button variant="ghost" size="sm" className="w-full text-[color:var(--muted-foreground)] hover:bg-[color:var(--muted)]/60 dark:hover:bg-[color:var(--muted)] transition-colors">
                         <ExternalLink className="w-4 h-4 mr-1" />
                         View
                       </Button>
@@ -319,35 +319,35 @@ export default function DashboardPage() {
         {/* Template Section */}
         <div className="mt-16">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold mb-2 text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+            <h2 className="text-3xl font-bold mb-2 text-[color:var(--foreground)]">
               Templates
             </h2>
-            <p className="text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+            <p className="text-[color:var(--muted-foreground)]">
               Start with pre-built templates to save time
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {templates.map((template) => (
-              <Card key={template.id} hover className="relative bg-[color:var(--bg-surface-light)] dark:bg-[color:var(--bg-surface)] border border-[color:var(--border-light)] dark:border-[color:var(--border-default)] shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+              <Card key={template.id} hover className="relative bg-[color:var(--card)] border border-[color:var(--border)] shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                 <div className="p-6">
-                  <div className="w-12 h-12 bg-[color:var(--active-nav-light)] dark:bg-[color:var(--bg-surface-hover)] rounded-xl flex items-center justify-center mb-4">
-                    <FileText className="w-6 h-6 text-[color:var(--icon-blue)] dark:text-[color:var(--brand-accent)]" />
+                  <div className="w-12 h-12 bg-[color:var(--muted)] rounded-xl flex items-center justify-center mb-4">
+                    <FileText className="w-6 h-6 text-[color:var(--icon-blue)]" />
                   </div>
-                  <h3 className="text-lg font-bold mb-2 text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+                  <h3 className="text-lg font-bold mb-2 text-[color:var(--foreground)]">
                     {template.title}
                   </h3>
-                  <p className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)] mb-4">
+                  <p className="text-sm text-[color:var(--muted-foreground)] mb-4">
                     {template.description || 'Use this template to start quickly.'}
                   </p>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-[color:var(--text-muted)] dark:text-[color:var(--text-muted)]">
+                    <p className="text-xs text-[color:var(--muted-foreground)]">
                       {template.questions?.length || 0} questions
                     </p>
                     <Button
                       onClick={() => createFromTemplate(template.id)}
                       isLoading={isCreating}
                       size="sm"
-                      className="bg-[color:var(--brand-primary-light)] hover:opacity-95 text-white dark:bg-[color:var(--brand-primary)]"
+                      className="bg-[color:var(--primary)] hover:opacity-95 text-white"
                     >
                       <Plus className="w-4 h-4 mr-1" />
                       Use Template

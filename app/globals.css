@@ -4,30 +4,30 @@
 :root {
   --bg-primary-light: #F8FAFC;
   --bg-surface-light: #FFFFFF;
-  --border-light: #E5E7EB;
-  --text-primary-light: #111827;
-  --text-secondary-light: #6B7280;
-  --active-nav-light: #DBEAFE;
+  --border-light: #E2E8F0;
+  --text-primary-light: #0F172A;
+  --text-secondary-light: #475569;
+  --active-nav-light: #E0E7FF;
   --brand-primary-light: #2563EB;
   --status-success-light: #DCFCE7;
   --status-success-text-light: #16A34A;
 
-  --bg-primary: #0B0E17;
-  --bg-secondary: #111827;
-  --bg-surface: #161E2E;
-  --bg-surface-hover: #1F2A3D;
-  --border-default: #1F2937;
-  --text-primary: #FFFFFF;
-  --text-secondary: #9CA3AF;
-  --text-muted: #6B7280;
-  --brand-primary: #2563EB;
-  --brand-accent: #0EA5E9;
+  --bg-primary: #020617;
+  --bg-secondary: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-surface-hover: #334155;
+  --border-default: #334155;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --brand-primary: #38BDF8;
+  --brand-accent: #7DD3FC;
   --status-success: #22C55E;
   --status-neutral: #475569;
   --accent-purple: #A855F7;
   --accent-pink: #EC4899;
   --accent-orange: #F97316;
-  --icon-blue: #3B82F6;
+  --icon-blue: #38BDF8;
   --logo-gold: #D4AF37;
 
   --background: var(--bg-primary-light);
@@ -38,41 +38,45 @@
   --popover-foreground: var(--text-primary-light);
   --primary: var(--brand-primary-light);
   --primary-foreground: #ffffff;
+  --on-primary: #ffffff;
   --secondary: var(--bg-surface-light);
   --secondary-foreground: var(--text-primary-light);
-  --muted: var(--bg-primary-light);
+  --muted: #F1F5F9;
   --muted-foreground: var(--text-secondary-light);
-  --accent: var(--bg-primary-light);
-  --accent-foreground: var(--text-primary-light);
-  --destructive: #dc2626;
+  --accent: var(--active-nav-light);
+  --accent-foreground: var(--brand-primary-light);
+  --destructive: #EF4444;
   --destructive-foreground: #ffffff;
   --border: var(--border-light);
   --input: var(--border-light);
   --ring: var(--brand-primary-light);
-  --gradient-start: var(--brand-primary);
-  --gradient-end: var(--brand-accent);
+  --gradient-start: #2563EB;
+  --gradient-end: #0EA5E9;
 }
 
 .dark {
   --background: var(--bg-primary);
   --foreground: var(--text-primary);
-  --card: var(--bg-surface);
+  --card: var(--bg-secondary);
   --card-foreground: var(--text-primary);
-  --popover: var(--bg-surface);
+  --popover: var(--bg-secondary);
   --popover-foreground: var(--text-primary);
   --primary: var(--brand-primary);
-  --primary-foreground: #ffffff;
-  --secondary: var(--bg-secondary);
+  --primary-foreground: #020617;
+  --on-primary: #ffffff;
+  --secondary: var(--bg-surface);
   --secondary-foreground: var(--text-primary);
-  --muted: var(--bg-surface-hover);
+  --muted: var(--bg-surface);
   --muted-foreground: var(--text-secondary);
   --accent: var(--bg-surface-hover);
   --accent-foreground: var(--text-primary);
-  --destructive: #ef4444;
+  --destructive: #EF4444;
   --destructive-foreground: #ffffff;
   --border: var(--border-default);
   --input: var(--border-default);
-  --ring: var(--brand-accent);
+  --ring: var(--brand-primary);
+  --gradient-start: #38BDF8;
+  --gradient-end: #818CF8;
 }
 
 @theme inline {
@@ -84,6 +88,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-on-primary: var(--on-primary);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -130,14 +135,17 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-  border-radius: 4px;
+  background: var(--muted-foreground);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--gradient-start) 80%, black) 0%, color-mix(in srgb, var(--gradient-end) 80%, black) 100%);
+  background: var(--primary);
+  background-clip: content-box;
 }

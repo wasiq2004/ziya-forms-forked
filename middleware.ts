@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
   const publicPaths = [
     '/auth/login',
     '/auth/register',
+    '/auth/forgot-password',
     '/api/auth/',
   ];
   

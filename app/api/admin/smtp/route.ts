@@ -23,14 +23,18 @@ export async function PUT(request: NextRequest) {
     if (user.role !== 'super_admin') return NextResponse.json({ message: 'Access denied' }, { status: 403 });
 
     const payload = await request.json();
+    // Use from_email as the SMTP username
+    const smtpUser = (payload.from_email || '').trim();
+    
     const ok = await saveSmtpSettings({
-      host: payload.host,
+      host: (payload.host || '').trim(),
       port: Number(payload.port),
-      user: payload.user,
-      password: payload.password,
+      user: smtpUser,
+      password: (payload.password || '').trim(),
       secure: !!payload.secure,
-      from_email: payload.from_email,
-      from_name: payload.from_name,
+      from_email: smtpUser,
+      from_name: (payload.from_name || '').trim(),
+      admin_email: (payload.admin_email || '').trim(),
     });
 
     if (!ok) {

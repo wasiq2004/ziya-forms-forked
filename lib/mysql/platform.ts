@@ -193,13 +193,14 @@ export async function getSmtpSettings(): Promise<SmtpSettings | null> {
     if (!row) return null;
     return {
       id: String(row.id),
-      host: row.host,
+      host: (row.host || '').trim(),
       port: Number(row.port),
-      user: row.user,
-      password: row.password,
+      user: (row.user || '').trim(),
+      password: (row.password || '').trim(),
       secure: !!row.secure,
-      from_email: row.from_email,
-      from_name: row.from_name,
+      from_email: (row.from_email || '').trim(),
+      from_name: (row.from_name || '').trim(),
+      admin_email: (row.admin_email || '').trim(),
       updated_at: row.updated_at,
     };
   } finally {
@@ -216,8 +217,8 @@ export async function saveSmtpSettings(settings: SmtpSettings) {
 
     if (!existing) {
       const [result]: any = await connection.execute(
-        `INSERT INTO smtp_settings (host, port, user, password, secure, from_email, from_name)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO smtp_settings (host, port, user, password, secure, from_email, from_name, admin_email)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           settings.host,
           settings.port,
@@ -226,6 +227,7 @@ export async function saveSmtpSettings(settings: SmtpSettings) {
           settings.secure,
           settings.from_email,
           settings.from_name,
+          settings.admin_email,
         ]
       );
       return result.affectedRows > 0;
@@ -233,7 +235,7 @@ export async function saveSmtpSettings(settings: SmtpSettings) {
 
     const [result]: any = await connection.execute(
       `UPDATE smtp_settings
-       SET host = ?, port = ?, user = ?, password = ?, secure = ?, from_email = ?, from_name = ?, updated_at = CURRENT_TIMESTAMP
+       SET host = ?, port = ?, user = ?, password = ?, secure = ?, from_email = ?, from_name = ?, admin_email = ?, updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`,
       [
         settings.host,
@@ -243,6 +245,7 @@ export async function saveSmtpSettings(settings: SmtpSettings) {
         settings.secure,
         settings.from_email,
         settings.from_name,
+        settings.admin_email,
         existing.id,
       ]
     );

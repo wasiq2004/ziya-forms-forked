@@ -46,9 +46,9 @@ export function QuestionEditor({ question, onUpdate, onDelete, isQuiz = false }:
   const showQuizSettings = isQuiz && ['short_answer', 'paragraph', 'multiple_choice', 'checkboxes', 'dropdown', 'linear_scale'].includes(localQuestion.type || '');
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-4 border-l-4 border-blue-500">
+    <div className="bg-[color:var(--card)]  rounded-lg shadow-md p-6 mb-4 border-l-4 border-blue-500">
       <div className="flex items-start gap-4 mb-4">
-        <GripVertical className="w-5 h-5 text-gray-400 mt-2 cursor-move" />
+        <GripVertical className="w-5 h-5 text-[color:var(--muted-foreground)] mt-2 cursor-move" />
         <div className="flex-1">
           <Input
             type="text"
@@ -69,7 +69,7 @@ export function QuestionEditor({ question, onUpdate, onDelete, isQuiz = false }:
             <select
               value={localQuestion.type || 'short_answer'}
               onChange={(e) => handleChange('type', e.target.value as QuestionType)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700"
+              className="px-3 py-2 border border-[color:var(--border)]  rounded-lg"
             >
               <option value="short_answer">Short Answer</option>
               <option value="paragraph">Paragraph</option>
@@ -95,7 +95,7 @@ export function QuestionEditor({ question, onUpdate, onDelete, isQuiz = false }:
               <p className="text-sm font-medium mb-2">Options:</p>
               {(localQuestion.options || []).map((option: any, index: number) => (
                 <div key={index} className="flex gap-2 items-center">
-                  <span className="text-gray-500">{index + 1}.</span>
+                  <span className="text-[color:var(--muted-foreground)]">{index + 1}.</span>
                   <Input
                     type="text"
                     value={typeof option === 'string' ? option : option.label || ''}
@@ -141,8 +141,8 @@ export function QuestionEditor({ question, onUpdate, onDelete, isQuiz = false }:
           )}
 
           {showQuizSettings && (
-            <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/40 dark:bg-amber-950/20">
-              <p className="mb-3 text-sm font-semibold text-amber-900 dark:text-amber-200">Quiz settings</p>
+            <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <p className="mb-3 text-sm font-semibold text-amber-900">Quiz settings</p>
               <div className="grid gap-4 md:grid-cols-2">
                 <Input
                   type="number"
@@ -154,11 +154,11 @@ export function QuestionEditor({ question, onUpdate, onDelete, isQuiz = false }:
 
                 {localQuestion.type === 'multiple_choice' || localQuestion.type === 'dropdown' ? (
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-amber-900 dark:text-amber-100">Correct answer</label>
+                    <label className="mb-1 block text-sm font-medium text-amber-900">Correct answer</label>
                     <select
                       value={localQuestion.settings?.correctAnswer || ''}
                       onChange={(e) => handleChange('settings', { ...localQuestion.settings, correctAnswer: e.target.value })}
-                      className="w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none dark:border-amber-900/60 dark:bg-slate-900 dark:text-white"
+                      className="w-full rounded-lg border border-amber-300 bg-[color:var(--card)] px-3 py-2 text-sm text-[color:var(--foreground)] outline-none"
                     >
                       <option value="">Select correct answer</option>
                       {optionValues.map((option, index) => (

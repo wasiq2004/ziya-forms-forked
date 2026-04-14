@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
-import { deleteManagedMediaUrl, saveUploadedImage } from '@/lib/media';
+import { saveImageToDatabase, deleteImageFromDatabase } from '@/lib/media';
 
 export const runtime = 'nodejs';
 
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file');
     const scope = String(formData.get('scope') || 'media');
-    const previousUrl = formData.get('previousUrl');
+    const entityId = String(formData.get('entityId') || user.id);
 
     if (!allowedScopes.has(scope)) {
       return NextResponse.json({ message: 'Invalid upload scope' }, { status: 400 });
@@ -31,11 +31,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Only image uploads are supported' }, { status: 400 });
     }
 
-    const url = await saveUploadedImage(file, scope);
-
-    if (typeof previousUrl === 'string' && previousUrl && previousUrl !== url) {
-      await deleteManagedMediaUrl(previousUrl);
+    // Determine entity type and save to database
+    const entityType = scope === 'users/avatars' ? 'user' : 'form';
+    
+    // Delete old image if exists
+    if (scope === 'users/avatars') {
+      await deleteImageFromDatabase(entityId, 'user');
+    } else if (scope === 'forms/banners') {
+      await deleteImageFromDatabase(entityId, 'form');
     }
+
+    // Save new image to database
+    const url = await saveImageToDatabase(file, scope, entityId, entityType);
 
     return NextResponse.json({ url });
   } catch (error) {
