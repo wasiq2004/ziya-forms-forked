@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { ArrowLeft, Eye, Save, Download, BarChart3, Link as LinkIcon, Settings } from 'lucide-react';
+import { ArrowLeft, Eye, Save, Download, Link as LinkIcon, Settings } from 'lucide-react';
 
 export default function FormHeader({
   title,
@@ -20,13 +20,13 @@ export default function FormHeader({
   onCopyLink,
   onSave,
   onExportCSV,
-  onExportExcel,
+  onExportExcel: _onExportExcel,
   onSettings,
   isSaving = false,
   isPublishing = false,
   isPublished = false,
   responsesCount = 0,
-  embedUrl = '',
+  embedUrl: _embedUrl = '',
 }: {
   title: string;
   showBackButton?: boolean;
@@ -52,32 +52,32 @@ export default function FormHeader({
   embedUrl?: string;
 }) {
   return (
-    <div className="border-b border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] text-[color:var(--text-primary-light)] shadow-lg dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-secondary)] dark:text-[color:var(--text-primary)]">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-4">
+    <div className="sticky top-0 z-30 border-b border-[color:var(--border)] bg-[color:var(--card)]/95 text-[color:var(--foreground)] shadow-sm backdrop-blur /90">
+      <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
             {showBackButton && (
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="border border-[color:var(--border-light)] text-[color:var(--text-primary-light)] hover:bg-[color:var(--active-nav-light)]/70 dark:border-white/10 dark:text-white dark:hover:bg-white/10">
+                <Button variant="ghost" size="sm" className="rounded-full border border-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/70 dark:hover:bg-[color:var(--card)]/10">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Dashboard
                 </Button>
               </Link>
             )}
-            <h1 className="text-xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{title}</h1>
+            <h1 className="truncate text-lg font-bold text-[color:var(--foreground)] sm:text-xl">{title}</h1>
             {responsesCount > 0 && (
-              <span className="text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+              <span className="text-sm text-[color:var(--muted-foreground)]">
                 {responsesCount} {responsesCount === 1 ? 'response' : 'responses'}
               </span>
             )}
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             {showPublishButton && onPublish && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onPublish}
-                className="border-[color:var(--brand-primary-light)] text-[color:var(--brand-primary-light)] dark:border-[color:var(--brand-accent)] dark:text-[color:var(--brand-accent)]"
+                className="rounded-full border-[color:var(--primary)] text-[color:var(--primary)]"
                 disabled={isPublishing}
               >
                 {isPublishing ? 'Processing...' : (isPublished ? 'Unpublish' : 'Publish')}
@@ -88,6 +88,7 @@ export default function FormHeader({
                 variant="secondary"
                 size="sm"
                 onClick={onCopyLink}
+                className="rounded-full"
               >
                 <LinkIcon className="w-4 h-4 mr-2" />
                 Copy Link
@@ -98,13 +99,14 @@ export default function FormHeader({
                 variant="secondary"
                 size="sm"
                 onClick={onCopyEmbed}
+                className="rounded-full"
               >
                 <LinkIcon className="w-4 h-4 mr-2" />
                 Embed
               </Button>
             )}
             {showPreviewButton && onPreview && (
-              <Button variant="secondary" size="sm" onClick={onPreview}>
+              <Button variant="secondary" size="sm" onClick={onPreview} className="rounded-full">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
@@ -115,6 +117,7 @@ export default function FormHeader({
                 isLoading={isSaving}
                 variant="secondary"
                 size="sm"
+                className="rounded-full"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Save
@@ -125,6 +128,7 @@ export default function FormHeader({
                 variant="secondary"
                 size="sm"
                 onClick={onSettings}
+                className="rounded-full"
               >
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
@@ -137,6 +141,7 @@ export default function FormHeader({
                 size="sm"
                 onClick={onExportCSV}
                 disabled={responsesCount === 0}
+                className="rounded-full"
               >
                   <Download className="w-4 h-4 mr-2" />
                   Export CSV

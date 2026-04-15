@@ -15,6 +15,7 @@ export function SmtpPanel() {
     secure: true,
     from_email: '',
     from_name: 'Ziya Forms',
+    admin_email: '',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -48,10 +49,22 @@ export function SmtpPanel() {
     setSaving(true);
     setError('');
     try {
+      // Trim all string values to prevent whitespace issues
+      // Note: username is automatically set to from_email
+      const trimmedForm = {
+        host: form.host.trim(),
+        port: form.port,
+        password: form.password.trim(),
+        from_email: form.from_email.trim(),
+        from_name: form.from_name.trim(),
+        admin_email: form.admin_email.trim(),
+        secure: form.secure,
+      };
+
       const response = await fetch('/api/admin/smtp', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(trimmedForm),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -69,12 +82,12 @@ export function SmtpPanel() {
   };
 
   return (
-    <Card className="border border-white/60 bg-white/75 shadow-[0_15px_60px_rgba(15,23,42,0.08)] backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
+    <Card className="border border-white/60 bg-[color:var(--card)]/75 shadow-[0_15px_60px_rgba(15,23,42,0.08)] backdrop-blur /40">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">SMTP</p>
-          <h2 className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">Sender configuration</h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Configure the SMTP credentials used for transactional emails.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">SMTP</p>
+          <h2 className="mt-2 text-2xl font-bold text-[color:var(--foreground)]">Sender configuration</h2>
+          <p className="mt-2 text-sm text-[color:var(--muted-foreground)]">Configure the SMTP credentials used for transactional emails.</p>
         </div>
         <Button variant="outline" onClick={fetchSettings}>
           <RefreshCcw className="mr-2 h-4 w-4" />
@@ -83,45 +96,46 @@ export function SmtpPanel() {
       </div>
 
       {loading ? (
-        <div className="py-10 text-sm text-slate-500">Loading SMTP settings...</div>
+        <div className="py-10 text-sm text-[color:var(--muted-foreground)]">Loading SMTP settings...</div>
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">SMTP Host</span>
-            <input value={form.host} onChange={(e) => setForm((prev) => ({ ...prev, host: e.target.value }))} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white" />
+            <span className="text-sm font-medium text-[color:var(--muted-foreground)]">SMTP Host</span>
+            <input value={form.host} onChange={(e) => setForm((prev) => ({ ...prev, host: e.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none" />
           </label>
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Port</span>
-            <input type="number" value={form.port} onChange={(e) => setForm((prev) => ({ ...prev, port: Number(e.target.value) }))} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white" />
+            <span className="text-sm font-medium text-[color:var(--muted-foreground)]">Port</span>
+            <input type="number" value={form.port} onChange={(e) => setForm((prev) => ({ ...prev, port: Number(e.target.value) }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none" />
           </label>
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Username</span>
-            <input value={form.user} onChange={(e) => setForm((prev) => ({ ...prev, user: e.target.value }))} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white" />
+            <span className="text-sm font-medium text-[color:var(--muted-foreground)]">Password</span>
+            <input type="password" value={form.password} onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none" />
           </label>
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</span>
-            <input type="password" value={form.password} onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white" />
+            <span className="text-sm font-medium text-[color:var(--muted-foreground)]">From Email</span>
+            <input value={form.from_email} onChange={(e) => setForm((prev) => ({ ...prev, from_email: e.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none" />
           </label>
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">From Email</span>
-            <input value={form.from_email} onChange={(e) => setForm((prev) => ({ ...prev, from_email: e.target.value }))} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white" />
+            <span className="text-sm font-medium text-[color:var(--muted-foreground)]">From Name</span>
+            <input value={form.from_name} onChange={(e) => setForm((prev) => ({ ...prev, from_name: e.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none" />
           </label>
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">From Name</span>
-            <input value={form.from_name} onChange={(e) => setForm((prev) => ({ ...prev, from_name: e.target.value }))} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white" />
+            <span className="text-sm font-medium text-[color:var(--muted-foreground)]">Admin Email (Notification Recipient)</span>
+            <input type="email" value={form.admin_email} onChange={(e) => setForm((prev) => ({ ...prev, admin_email: e.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-[color:var(--foreground)] outline-none" />
           </label>
-          <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/60">
+          <label className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--background)] px-4 py-3 /60">
             <input type="checkbox" checked={!!form.secure} onChange={(e) => setForm((prev) => ({ ...prev, secure: e.target.checked }))} />
-            <span className="text-sm text-slate-700 dark:text-slate-300">Use secure connection (TLS/SSL)</span>
+            <span className="text-sm text-[color:var(--muted-foreground)]">Use secure connection (TLS/SSL)</span>
           </label>
-          <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600 dark:bg-slate-900/60 dark:text-slate-300">
-            <div className="flex items-center gap-2 font-semibold text-slate-900 dark:text-white"><Mail className="h-4 w-4" /> SMTP Overview</div>
+          <div className="rounded-2xl bg-[color:var(--background)] p-4 text-sm text-[color:var(--muted-foreground)] /60">
+            <div className="flex items-center gap-2 font-semibold text-[color:var(--foreground)]"><Mail className="h-4 w-4" /> SMTP Overview</div>
             <p className="mt-3">These settings control the sender identity and transport for ZiyaForms platform emails.</p>
-            <div className="mt-4 flex items-center gap-2 text-xs text-slate-500"><LockKeyhole className="h-4 w-4" /> Keep credentials limited to super admin access.</div>
+            <p className="mt-2 text-xs">The SMTP username is automatically set to the <strong>From Email</strong> address.</p>
+            <div className="mt-4 flex items-center gap-2 text-xs text-[color:var(--muted-foreground)]"><LockKeyhole className="h-4 w-4" /> Keep credentials limited to super admin access.</div>
           </div>
 
           {notice && <div className="lg:col-span-2 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200">{notice}</div>}
-          {error && <div className="lg:col-span-2 rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:bg-rose-500/10 dark:text-rose-200">{error}</div>}
+          {error && <div className="lg:col-span-2 rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-800">{error}</div>}
 
           <div className="lg:col-span-2 flex justify-end">
             <Button onClick={saveSettings} isLoading={saving} className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white">

@@ -11,36 +11,40 @@ async function getAuthToken(request: NextRequest) {
     });
     return token;
   } catch (error) {
-    console.error('Error checking session token:', error);
     return null;
   }
 }
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Skip static assets and public files so images/icons are never redirected.
+  if (/\.[^/]+$/.test(pathname)) {
+    return NextResponse.next();
+  }
+
   // Get user authentication status
   const token = await getAuthToken(request);
   const userAuthenticated = !!token;
-  
-  console.log('Middleware - User authenticated:', userAuthenticated);
-  console.log('Middleware - Request path:', request.nextUrl.pathname);
 
   // Define public paths that don't require authentication
   const publicPaths = [
     '/auth/login',
     '/auth/register',
+    '/auth/forgot-password',
     '/api/auth/',
   ];
   
   // Check if the current path is a public path
   const isPublicPath = publicPaths.some(path => 
-    request.nextUrl.pathname.startsWith(path)
+    pathname.startsWith(path)
   );
-  const isRootPath = request.nextUrl.pathname === '/';
+  const isRootPath = pathname === '/';
   
   // Check if the current path is a form view path (publicly accessible forms)
-  const isFormPath = request.nextUrl.pathname.startsWith('/form/');
-  const isEmbedPath = request.nextUrl.pathname.startsWith('/forms/embed');
-  const isAdminPath = request.nextUrl.pathname.startsWith('/admin');
+  const isFormPath = pathname.startsWith('/form/');
+  const isEmbedPath = pathname.startsWith('/forms/embed');
+  const isAdminPath = pathname.startsWith('/admin');
 
   // If user is not authenticated and trying to access protected routes
   if (
@@ -50,21 +54,19 @@ export async function middleware(request: NextRequest) {
     !isFormPath &&
     !isEmbedPath
   ) {
-    console.log('Middleware - No user, redirecting to login');
     // Redirect to login page
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/auth/login';
-    redirectUrl.searchParams.set('callbackUrl', request.nextUrl.pathname + request.nextUrl.search);
+    redirectUrl.searchParams.set('callbackUrl', pathname + request.nextUrl.search);
     return NextResponse.redirect(redirectUrl);
   }
 
   // If user is authenticated and trying to access auth pages, redirect to dashboard
   if (
     userAuthenticated && 
-    (request.nextUrl.pathname === '/auth/login' || 
-     request.nextUrl.pathname === '/auth/register')
+    (pathname === '/auth/login' || 
+     pathname === '/auth/register')
   ) {
-    console.log('Middleware - Authenticated user accessing login page, redirecting to dashboard');
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/dashboard';
     return NextResponse.redirect(redirectUrl);
@@ -75,8 +77,6 @@ export async function middleware(request: NextRequest) {
     redirectUrl.pathname = '/dashboard';
     return NextResponse.redirect(redirectUrl);
   }
-
-  console.log('Middleware - Continuing with request');
   
   // For authenticated users accessing protected routes, continue with the request
   return NextResponse.next();

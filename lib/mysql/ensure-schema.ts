@@ -115,6 +115,14 @@ export function ensureAdminSchema() {
           )`
         );
 
+        const [smtpAdminEmailColumn]: any = await connection.execute("SHOW COLUMNS FROM smtp_settings LIKE 'admin_email'");
+        if (smtpAdminEmailColumn.length === 0) {
+          await connection.execute(
+            `ALTER TABLE smtp_settings
+             ADD COLUMN admin_email VARCHAR(255) NULL`
+          );
+        }
+
         await connection.execute(`UPDATE users SET status = 'active' WHERE status IS NULL`);
         await connection.execute(`UPDATE users SET role = 'user' WHERE role IS NULL`);
         await connection.execute(`UPDATE users SET billing_plan = 'free' WHERE billing_plan IS NULL`);

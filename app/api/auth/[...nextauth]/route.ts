@@ -70,39 +70,36 @@ export const authOptions: AuthOptions = {
           // Check if user exists
           const user = await getUserByEmail(credentials.email);
           
-          if (!user) {
-            // User doesn't exist
-            console.log('User not found');
-            return null;
-          }
+        if (!user) {
+          // User doesn't exist
+          return null;
+        }
           
           // Check if password_hash exists (for backward compatibility)
-          if (!user.password_hash) {
-            console.error('User exists but has no password hash');
-            return null;
-          }
+        if (!user.password_hash) {
+          console.error('User exists but has no password hash');
+          return null;
+        }
 
-          if ((user.status || 'active') === 'inactive') {
-            console.log('Inactive user attempted to sign in');
-            return null;
-          }
+        if ((user.status || 'active') === 'inactive') {
+          return null;
+        }
           
           // Verify password
-          const isValid = await bcrypt.compare(credentials.password, user.password_hash);
-          
-          if (!isValid) {
-            console.log('Invalid password');
-            return null;
-          }
+        const isValid = await bcrypt.compare(credentials.password, user.password_hash);
+        
+        if (!isValid) {
+          return null;
+        }
           
           // Return user object without password hash
           const { password_hash, ...userWithoutPassword } = user;
           
-          console.log('User authenticated successfully:', userWithoutPassword);
-          return {
-            id: userWithoutPassword.id,
-            email: userWithoutPassword.email,
+      return {
+          id: userWithoutPassword.id,
+          email: userWithoutPassword.email,
             name: userWithoutPassword.full_name,
+            avatarUrl: userWithoutPassword.avatar_url || null,
             role: userWithoutPassword.role || 'user',
             status: userWithoutPassword.status || 'active',
           };
@@ -134,21 +131,21 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-      //console.log('Session callback - session:', session, 'token:', token);
       if (session.user) {
         session.user.id = token.sub!;
         session.user.role = token.role || 'user';
         session.user.status = token.status || 'active';
+        session.user.avatarUrl = (token.avatarUrl as string | null | undefined) || null;
       }
       return session;
     },
     async jwt({ token, user, account, profile }) {
-      //console.log('JWT callback - token:', token, 'user:', user, 'account:', account, 'profile:', profile);
       // If this is the first time the user is signing in
       if (user) {
         token.sub = user.id;
         token.role = user.role || token.role || 'user';
         token.status = user.status || token.status || 'active';
+        token.avatarUrl = user.avatarUrl || token.avatarUrl || null;
       }
       
       // For Google sign-in, we might need to fetch the user ID
@@ -160,6 +157,7 @@ export const authOptions: AuthOptions = {
             token.sub = existingUser.id;
             token.role = existingUser.role || 'user';
             token.status = existingUser.status || 'active';
+            token.avatarUrl = existingUser.avatar_url || token.avatarUrl || null;
           }
         } catch (error) {
           console.error('Error fetching user ID for JWT token:', error);
@@ -169,8 +167,6 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async signIn({ user, account, profile }) {
-      console.log('SignIn callback triggered', { user, account, profile });
-      
       // If signing in with Google
       if (account?.provider === 'google') {
         try {
@@ -178,13 +174,11 @@ export const authOptions: AuthOptions = {
           const existingUser = await getUserByEmail(user.email!);
 
           if (existingUser && (existingUser.status || 'active') === 'inactive') {
-            console.log('Inactive Google user attempted to sign in');
             return false;
           }
           
           // If user doesn't exist, create them
           if (!existingUser) {
-            console.log('Creating new user from Google auth:', { email: user.email, name: user.name });
             const newUser = await createUser({
               email: user.email!,
               full_name: user.name || undefined,
@@ -197,10 +191,9 @@ export const authOptions: AuthOptions = {
             user.id = newUser.id;
             user.role = 'user';
             user.status = 'active';
-            console.log('New user created successfully:', newUser.id);
+            user.avatarUrl = user.image || null;
           } else {
             // Update existing user with latest info from Google
-            console.log('Updating existing user with Google info:', existingUser.id);
             await updateUser(existingUser.id, {
               full_name: user.name || undefined,
               avatar_url: user.image || undefined,
@@ -210,7 +203,7 @@ export const authOptions: AuthOptions = {
             user.id = existingUser.id;
             user.role = existingUser.role || 'user';
             user.status = existingUser.status || 'active';
-            console.log('User updated successfully:', existingUser.id);
+            user.avatarUrl = existingUser.avatar_url || user.image || null;
           }
           
           return true;
@@ -219,12 +212,9 @@ export const authOptions: AuthOptions = {
           return false;
         }
       }
-      
-      console.log('SignIn callback returning true');
       return true;
     },
     async redirect({ url, baseUrl }) {
-      console.log('Redirect callback - url:', url, 'baseUrl:', baseUrl);
       // If it's a relative URL, make it absolute
       if (url.startsWith("/")) {
         return `${baseUrl}${url}`;

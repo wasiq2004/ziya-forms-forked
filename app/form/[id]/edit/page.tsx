@@ -212,7 +212,7 @@ export default function FormEditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-[color:var(--background)]">
       <FormHeader
         title="Form Builder"
         showPreviewButton
@@ -248,24 +248,24 @@ export default function FormEditPage() {
       {/* Embed Modal */}
       {showEmbedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-[color:var(--card)] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-900">Embed Form</h2>
+                <h2 className="text-xl font-bold text-[color:var(--foreground)]">Embed Form</h2>
                 <button 
                   onClick={() => setShowEmbedModal(false)}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-[color:var(--muted-foreground)] hover:text-[color:var(--muted-foreground)]"
                 >
                   ✕
                 </button>
               </div>
               
-              <p className="text-gray-700 mb-4">
+              <p className="text-[color:var(--muted-foreground)] mb-4">
                 Copy and paste this code into your website to embed this form.
               </p>
               
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-800 mb-2">
+                <label className="block text-sm font-medium text-[color:var(--foreground)] mb-2">
                   Embed Link
                 </label>
                 <div className="flex">
@@ -284,7 +284,7 @@ export default function FormEditPage() {
               </div>
               
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-800 mb-2">
+                <label className="block text-sm font-medium text-[color:var(--foreground)] mb-2">
                   Iframe Code
                 </label>
                 <div className="relative">
@@ -297,7 +297,7 @@ export default function FormEditPage() {
   frameborder="0"
   style="borderRadius: 8px;">
 </iframe>`}
-                    className="w-full h-40 p-3 border border-gray-300 rounded-md font-mono text-sm text-gray-800 bg-gray-50"
+                    className="w-full h-40 p-3 border border-[color:var(--border)] rounded-md font-mono text-sm text-[color:var(--foreground)] bg-[color:var(--background)]"
                   />
                   <Button 
                     onClick={() => {
@@ -332,73 +332,87 @@ export default function FormEditPage() {
         </div>
       )}
 
-      <div className="container mx-auto px-6 py-8 max-w-4xl">
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-slate-900 mb-6">
-          <div className="border-b border-slate-200 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-800 p-6 dark:border-slate-800">
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="overflow-hidden rounded-[2.5rem] border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_32px_100px_rgba(0,0,0,0.1)] mb-8 transition-all">
+          <div className="p-8 pb-4">
+             <label className="text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--primary)] px-1">
+                Form Banner
+              </label>
+              <p className="text-sm text-[color:var(--muted-foreground)] px-1 mb-4">
+                Choose a banner image and position it like Google Forms.
+              </p>
+          </div>
+          
+          <div className="relative bg-[color:var(--muted)] overflow-hidden">
             <ImageCropPicker
-              label="Banner"
-              description="Choose a banner image and position it like Google Forms."
+              label=""
+              description=""
               value={form?.banner_url || null}
               onChange={(bannerUrl) => setForm(prev => prev ? { ...prev, banner_url: bannerUrl } : null)}
               aspectRatio={4}
               buttonLabel="Choose banner image"
-              emptyLabel="Add a banner to give the form a stronger visual identity."
-              cropTitle="Crop form banner"
-              cropHint="Drag to move the image and use zoom to fit the most important area."
-              previewClassName="rounded-2xl border-white/10"
+              emptyLabel="Add a banner for a premium look"
+              cropTitle="Crop banner"
+              cropHint="Adjust the crop to define your form's identity."
+              previewClassName="h-full w-full object-cover"
               uploadScope="forms/banners"
+              className="px-8 pb-8"
             />
           </div>
 
-          <div className="space-y-4 p-8">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
+          <div className="p-10 pt-6 space-y-6">
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--primary)] px-1">
                 Form title
-              </p>
+              </label>
               <Input
                 type="text"
                 value={form?.title || ''}
                 onChange={(e) => setForm(prev => prev ? { ...prev, title: e.target.value } : null)}
-                className="mt-2 border-0 bg-transparent px-0 text-4xl font-bold tracking-tight text-slate-950 placeholder:text-slate-400 focus-visible:ring-0 dark:text-white"
-                placeholder="Form Title"
+                className="text-4xl md:text-5xl font-extrabold tracking-tight bg-transparent border-0 px-2 focus:ring-0 focus:outline-none placeholder:opacity-20"
+                placeholder="Untitled Form"
               />
             </div>
 
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-[0.3em] text-[color:var(--muted-foreground)] px-1">
                 Description
-              </p>
+              </label>
               <Input
                 type="text"
                 value={form?.description || ''}
                 onChange={(e) => setForm(prev => prev ? { ...prev, description: e.target.value } : null)}
-                className="mt-2 border-0 bg-slate-50 text-slate-700 focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-slate-800 dark:text-slate-100"
-                placeholder="Form description (optional)"
+                className="text-lg bg-[color:var(--background)]/50 border-0 focus:ring-2 focus:ring-[color:var(--primary)]/20 px-4 py-3 rounded-2xl transition-all"
+                placeholder="Describe what this form is about..."
               />
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6 mb-12">
           {questions.map((question, index) => (
-            <QuestionEditor
-              key={question.id || index}
-              question={question}
-              onUpdate={(updated) => updateQuestion(index, updated)}
-              onDelete={() => deleteQuestion(index)}
-              isQuiz={form?.settings?.is_quiz ?? false}
-            />
+            <div key={question.id || index} className="group transition-all duration-300 hover:scale-[1.01]">
+              <QuestionEditor
+                question={question}
+                onUpdate={(updated) => updateQuestion(index, updated)}
+                onDelete={() => deleteQuestion(index)}
+                isQuiz={form?.settings?.is_quiz ?? false}
+              />
+            </div>
           ))}
         </div>
 
-        <Button
-          onClick={addQuestion}
-          variant="outline"
-          className="w-full mt-6"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Add Question
-        </Button>
+        <div className="flex justify-center pt-4">
+          <Button
+            onClick={addQuestion}
+            variant="outline"
+            size="lg"
+            className="rounded-full px-10 py-6 border-2 border-dashed border-[color:var(--border)] hover:border-[color:var(--primary)] text-[color:var(--muted-foreground)] hover:text-[color:var(--primary)] transition-all bg-[color:var(--card)]/50 group"
+          >
+            <Plus className="w-6 h-6 mr-3 group-hover:rotate-90 transition-transform duration-300" />
+            <span className="text-base font-bold">Add Question</span>
+          </Button>
+        </div>
       </div>
     </div>
   );

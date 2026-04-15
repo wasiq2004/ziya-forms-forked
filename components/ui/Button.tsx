@@ -15,9 +15,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     
     const variants = {
       primary: 'gradient-bg text-white hover:shadow-lg focus:ring-blue-500',
-      secondary: 'bg-[color:var(--bg-surface-light)] text-[color:var(--text-primary-light)] border border-[color:var(--border-light)] hover:bg-[color:var(--active-nav-light)] focus:ring-[color:var(--brand-primary-light)] dark:bg-[color:var(--bg-surface)] dark:text-[color:var(--text-primary)] dark:border-[color:var(--border-default)] dark:hover:bg-[color:var(--bg-surface-hover)]',
-      outline: 'border border-[color:var(--brand-primary-light)] bg-transparent text-[color:var(--brand-primary-light)] hover:bg-[color:var(--active-nav-light)]/60 focus:ring-[color:var(--brand-primary-light)] dark:border-[color:var(--brand-accent)] dark:text-[color:var(--brand-accent)] dark:hover:bg-[color:var(--bg-surface-hover)]',
-      ghost: 'bg-transparent hover:bg-[color:var(--active-nav-light)] text-[color:var(--text-secondary-light)] focus:ring-[color:var(--brand-primary-light)] dark:hover:bg-[color:var(--bg-surface-hover)] dark:text-[color:var(--text-secondary)]'
+      secondary: 'bg-[color:var(--card)] text-[color:var(--foreground)] border border-[color:var(--border)] hover:bg-[color:var(--muted)] focus:ring-[color:var(--primary)]    dark:hover:bg-[color:var(--muted)]',
+      outline: 'border border-[color:var(--primary)] bg-transparent text-[color:var(--primary)] hover:bg-[color:var(--muted)]/60 focus:ring-[color:var(--primary)]   dark:hover:bg-[color:var(--muted)]',
+      ghost: 'bg-transparent hover:bg-[color:var(--muted)] text-[color:var(--muted-foreground)] focus:ring-[color:var(--primary)] dark:hover:bg-[color:var(--muted)] '
     };
     
     const sizes = {

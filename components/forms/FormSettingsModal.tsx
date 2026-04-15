@@ -31,9 +31,9 @@ function ToggleSwitch({
   return (
     <div className="flex items-start justify-between gap-4 py-3">
       <div className="max-w-xl">
-        <p className="text-sm font-medium text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{label}</p>
+        <p className="text-sm font-medium text-[color:var(--foreground)]">{label}</p>
         {description && (
-          <p className="mt-1 text-xs leading-5 text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+          <p className="mt-1 text-xs leading-5 text-[color:var(--muted-foreground)]">
             {description}
           </p>
         )}
@@ -42,13 +42,13 @@ function ToggleSwitch({
         type="button"
         onClick={() => onChange(!checked)}
         className={[
-          'relative h-6 w-11 rounded-full transition-colors',
-          checked ? 'bg-[color:var(--brand-primary-light)] dark:bg-[color:var(--brand-accent)]' : 'bg-slate-300 dark:bg-slate-700',
+          'relative h-6 w-11 rounded-full transition-colors overflow-hidden shadow-sm',
+          checked ? 'bg-[color:var(--primary)] ' : 'bg-[color:var(--border)] ',
         ].join(' ')}
       >
         <span
           className={[
-            'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform',
+            'absolute top-0.5 h-5 w-5 rounded-full bg-[color:var(--card)] transition-transform',
             checked ? 'translate-x-5' : 'translate-x-0.5',
           ].join(' ')}
         />
@@ -73,9 +73,9 @@ function SelectField({
   return (
     <div className="py-3">
       <div className="max-w-xl">
-        <p className="text-sm font-medium text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{label}</p>
+        <p className="text-sm font-medium text-[color:var(--foreground)]">{label}</p>
         {description && (
-          <p className="mt-1 text-xs leading-5 text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+          <p className="mt-1 text-xs leading-5 text-[color:var(--muted-foreground)]">
             {description}
           </p>
         )}
@@ -84,7 +84,7 @@ function SelectField({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="min-w-56 rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] px-4 py-2 text-sm text-[color:var(--text-primary-light)] shadow-sm outline-none transition focus:border-[color:var(--brand-primary-light)] dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)] dark:text-[color:var(--text-primary)]"
+          className="min-w-56 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-sm text-[color:var(--foreground)] shadow-sm outline-none transition focus:border-[color:var(--primary)]"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -123,27 +123,27 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
     <button
       type="button"
       onClick={() => setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }))}
-      className="flex w-full items-center justify-between gap-4 border-b border-[color:var(--border-light)] px-6 py-5 text-left dark:border-[color:var(--border-default)]"
+      className="flex w-full items-center justify-between gap-4 border-b border-[color:var(--border)] px-6 py-5 text-left"
     >
       <div>
-        <p className="text-base font-semibold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">{title}</p>
-        <p className="mt-1 text-xs text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">{description}</p>
+        <p className="text-base font-semibold text-[color:var(--foreground)]">{title}</p>
+        <p className="mt-1 text-xs text-[color:var(--muted-foreground)]">{description}</p>
       </div>
       {openSections[key] ? (
-        <ChevronUp className="h-4 w-4 text-[color:var(--text-muted)] dark:text-[color:var(--text-secondary)]" />
+        <ChevronUp className="h-4 w-4 text-[color:var(--muted-foreground)]" />
       ) : (
-        <ChevronDown className="h-4 w-4 text-[color:var(--text-muted)] dark:text-[color:var(--text-secondary)]" />
+        <ChevronDown className="h-4 w-4 text-[color:var(--muted-foreground)]" />
       )}
     </button>
   );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] shadow-[0_30px_100px_rgba(15,23,42,0.3)] dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
-        <div className="flex items-center justify-between border-b border-[color:var(--border-light)] px-6 py-5 dark:border-[color:var(--border-default)]">
+      <div className="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_30px_100px_rgba(15,23,42,0.3)]">
+        <div className="flex items-center justify-between border-b border-[color:var(--border)] px-6 py-5">
           <div>
-            <h2 className="text-xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">Settings</h2>
-            <p className="mt-1 text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+            <h2 className="text-xl font-bold text-[color:var(--foreground)]">Settings</h2>
+            <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">
               Match the Google Forms-style options shown in your reference.
             </p>
           </div>
@@ -154,7 +154,7 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
 
         <div className="max-h-[calc(92vh-152px)] overflow-y-auto">
           <div className="px-6 py-4">
-            <div className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-primary-light)] px-5 py-4 dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface-hover)]">
+            <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--background)] px-5 py-4">
               <ToggleSwitch
                 label="Make this a quiz"
                 description="Assign point values, set answers, and automatically provide feedback."
@@ -164,7 +164,7 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
             </div>
           </div>
 
-          <div className="border-t border-[color:var(--border-light)] dark:border-[color:var(--border-default)]">
+          <div className="border-t border-[color:var(--border)]">
             {sectionHeader('responses', 'Responses', 'Manage how responses are collected and protected')}
             {openSections.responses && (
               <div className="px-6 pb-2">
@@ -214,7 +214,7 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
             )}
           </div>
 
-          <div className="border-t border-[color:var(--border-light)] dark:border-[color:var(--border-default)]">
+          <div className="border-t border-[color:var(--border)]">
             {sectionHeader('presentation', 'Presentation', 'Manage how the form and responses are presented')}
             {openSections.presentation && (
               <div className="px-6 pb-2">
@@ -233,8 +233,8 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
                 />
 
                 <div className="py-3">
-                  <p className="text-sm font-medium text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">Confirmation message</p>
-                  <p className="mt-1 text-xs text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+                  <p className="text-sm font-medium text-[color:var(--foreground)]">Confirmation message</p>
+                  <p className="mt-1 text-xs text-[color:var(--muted-foreground)]">
                     This is shown after a successful submission.
                   </p>
                   <Textarea
@@ -269,7 +269,7 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
             )}
           </div>
 
-          <div className="border-t border-[color:var(--border-light)] dark:border-[color:var(--border-default)]">
+          <div className="border-t border-[color:var(--border)]">
             {sectionHeader('defaults', 'Defaults', 'Settings applied to this form and new questions')}
             {openSections.defaults && (
               <div className="px-6 pb-2">
@@ -296,7 +296,7 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-[color:var(--border-light)] px-6 py-5 dark:border-[color:var(--border-default)]">
+        <div className="flex items-center justify-end gap-3 border-t border-[color:var(--border)] px-6 py-5">
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>

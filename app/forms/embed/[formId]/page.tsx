@@ -222,18 +222,18 @@ export default function FormEmbedPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[color:var(--bg-primary-light)] dark:bg-[color:var(--bg-primary)]">
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[color:var(--brand-primary-light)] dark:border-[color:var(--brand-accent)]" />
+      <div className="min-h-screen flex items-center justify-center bg-[color:var(--background)]">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[color:var(--primary)]" />
       </div>
     );
   }
 
   if (!form) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[color:var(--bg-primary-light)] dark:bg-[color:var(--bg-primary)]">
+      <div className="min-h-screen flex items-center justify-center bg-[color:var(--background)]">
         <div className="text-center">
-          <h1 className="mb-4 text-2xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">Form Not Found</h1>
-          <p className="text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+          <h1 className="mb-4 text-2xl font-bold text-[color:var(--foreground)]">Form Not Found</h1>
+          <p className="text-[color:var(--muted-foreground)]">
             The form you're looking for doesn't exist or is no longer available.
           </p>
         </div>
@@ -243,10 +243,10 @@ export default function FormEmbedPage() {
 
   if (!form.is_published || !form.is_accepting_responses) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[color:var(--bg-primary-light)] dark:bg-[color:var(--bg-primary)]">
+      <div className="min-h-screen flex items-center justify-center bg-[color:var(--background)]">
         <div className="text-center">
-          <h1 className="mb-4 text-2xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">Form Not Available</h1>
-          <p className="text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+          <h1 className="mb-4 text-2xl font-bold text-[color:var(--foreground)]">Form Not Available</h1>
+          <p className="text-[color:var(--muted-foreground)]">
             This form is not currently accepting responses.
           </p>
         </div>
@@ -256,30 +256,30 @@ export default function FormEmbedPage() {
 
   if (submitSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[color:var(--bg-primary-light)] dark:bg-[color:var(--bg-primary)]">
-        <div className="w-full max-w-md rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] p-8 text-center shadow-[0_24px_60px_rgba(15,23,42,0.1)] dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
-          <CheckCircle className="mx-auto mb-4 h-16 w-16 text-[color:var(--status-success-text-light)] dark:text-[color:var(--status-success)]" />
-          <h1 className="mb-4 text-2xl font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">Response Submitted!</h1>
-          <p className="mb-6 text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+      <div className="min-h-screen flex items-center justify-center bg-[color:var(--background)]">
+        <div className="w-full max-w-md rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-8 text-center shadow-[0_24px_60px_rgba(15,23,42,0.1)]">
+          <CheckCircle className="mx-auto mb-4 h-16 w-16 text-[color:var(--status-success-text-light)]" />
+          <h1 className="mb-4 text-2xl font-bold text-[color:var(--foreground)]">Response Submitted!</h1>
+          <p className="mb-6 text-[color:var(--muted-foreground)]">
             {form.settings?.confirmation_message || 'Thank you for completing the form. Your response has been recorded.'}
           </p>
           {form.settings?.is_quiz && quizResult && (
-            <div className="mb-6 rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-primary-light)] p-4 text-left dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface-hover)]">
-              <p className="text-sm font-semibold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+            <div className="mb-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--background)] p-4 text-left">
+              <p className="text-sm font-semibold text-[color:var(--foreground)]">
                 Quiz score: {quizResult.score} / {quizResult.maxScore} ({quizResult.percentage}%)
               </p>
               {quizResult.results.length > 0 && (
                 <div className="mt-4 space-y-3">
                   {quizResult.results.map((item) => (
-                    <div key={item.question_id} className="rounded-xl bg-[color:var(--bg-surface-light)] p-3 dark:bg-[color:var(--bg-surface)]">
-                      <p className="text-sm font-medium text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+                    <div key={item.question_id} className="rounded-xl bg-[color:var(--card)] p-3">
+                      <p className="text-sm font-medium text-[color:var(--foreground)]">
                         {item.is_correct ? 'Correct' : 'Incorrect'} - {item.points_awarded}/{item.points_possible}
                       </p>
                       {item.feedback && (
-                        <p className="mt-1 text-sm text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">{item.feedback}</p>
+                        <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">{item.feedback}</p>
                       )}
                       {!item.is_correct && item.correct_answer && (
-                        <p className="mt-1 text-xs text-[color:var(--text-muted)] dark:text-[color:var(--text-secondary)]">
+                        <p className="mt-1 text-xs text-[color:var(--muted-foreground)]">
                           Correct answer: {item.correct_answer}
                         </p>
                       )}
@@ -336,20 +336,20 @@ export default function FormEmbedPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[color:var(--bg-primary-light)] px-4 py-8 dark:bg-[color:var(--bg-primary)]">
+    <div className="min-h-screen bg-[color:var(--background)] px-4 py-8">
       <div className="mx-auto max-w-2xl">
         {form.settings?.show_progress_bar && (
-          <div className="mb-4 overflow-hidden rounded-full border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
+          <div className="mb-4 overflow-hidden rounded-full border border-[color:var(--border)] bg-[color:var(--card)]">
             <div
-              className="h-2 rounded-full bg-[color:var(--brand-primary-light)] dark:bg-[color:var(--brand-accent)]"
+              className="h-2 rounded-full bg-[color:var(--primary)]"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
         )}
 
-        <div className="mb-6 overflow-hidden rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] shadow-[0_24px_60px_rgba(15,23,42,0.1)] dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]">
+        <div className="mb-6 overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_24px_60px_rgba(15,23,42,0.1)]">
           {form.banner_url ? (
-            <div className="h-52 w-full overflow-hidden bg-[color:var(--bg-primary-light)] dark:bg-[color:var(--bg-surface-hover)]">
+            <div className="h-52 w-full overflow-hidden bg-[color:var(--background)]">
               <img src={form.banner_url} alt={form.title} className="h-full w-full object-cover" />
             </div>
           ) : (
@@ -357,21 +357,21 @@ export default function FormEmbedPage() {
           )}
 
           <div className="p-8">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[color:var(--active-nav-light)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--brand-primary-light)] dark:bg-[color:var(--bg-surface-hover)] dark:text-[color:var(--brand-accent)]">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[color:var(--muted)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--primary)]">
               Embedded form
             </div>
-            <h1 className="text-center text-3xl font-bold tracking-tight text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+            <h1 className="text-center text-3xl font-bold tracking-tight text-[color:var(--foreground)]">
               {form.title}
             </h1>
             {form.description && (
-              <p className="mt-3 text-center text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+              <p className="mt-3 text-center text-[color:var(--muted-foreground)]">
                 {form.description}
               </p>
             )}
 
             {shouldCollectEmail && (
               <div className="mt-8">
-                <label htmlFor="email" className="mb-1 block text-sm font-medium text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+                <label htmlFor="email" className="mb-1 block text-sm font-medium text-[color:var(--muted-foreground)]">
                   Your Email {isEmailRequired ? '(required)' : '(optional)'}
                 </label>
                 <Input
@@ -383,7 +383,7 @@ export default function FormEmbedPage() {
                   required={isEmailRequired}
                 />
                 {form.settings?.limit_to_one_response && (
-                  <p className="mt-2 text-xs text-[color:var(--text-muted)] dark:text-[color:var(--text-secondary)]">
+                  <p className="mt-2 text-xs text-[color:var(--muted-foreground)]">
                     Email addresses are used to limit responses to one submission.
                   </p>
                 )}
@@ -396,20 +396,20 @@ export default function FormEmbedPage() {
           {displayQuestions.map((question, index) => (
             <div
               key={question.id}
-              className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-surface-light)] p-6 shadow-sm dark:border-[color:var(--border-default)] dark:bg-[color:var(--bg-surface)]"
+              className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-sm"
             >
               <div className="mb-4 h-1 w-24 rounded-full" style={{ background: form.theme_color || '#2563eb' }} />
               <div className="mb-4 flex items-start">
-                <span className="mr-3 mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--active-nav-light)] font-medium text-[color:var(--brand-primary-light)] dark:bg-[color:var(--bg-surface-hover)] dark:text-[color:var(--brand-accent)]">
+                <span className="mr-3 mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--muted)] font-medium text-[color:var(--primary)]">
                   {index + 1}
                 </span>
                 <div>
-                  <h3 className="text-lg font-semibold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+                  <h3 className="text-lg font-semibold text-[color:var(--foreground)]">
                     {question.title}
                     {question.is_required && <span className="ml-1 text-red-500">*</span>}
                   </h3>
                   {question.description && (
-                    <p className="mt-1 text-[color:var(--text-secondary-light)] dark:text-[color:var(--text-secondary)]">
+                    <p className="mt-1 text-[color:var(--muted-foreground)]">
                       {question.description}
                     </p>
                   )}
@@ -447,9 +447,9 @@ export default function FormEmbedPage() {
                         checked={answers[question.id] === (typeof option === 'string' ? option : option.value)}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleAnswerChange(question.id, e.target.value)}
                         required={question.is_required}
-                        className="h-4 w-4 text-[color:var(--brand-primary-light)] focus:ring-[color:var(--brand-primary-light)] dark:text-[color:var(--brand-accent)]"
+                        className="h-4 w-4 text-[color:var(--primary)] focus:ring-[color:var(--primary)]"
                       />
-                      <label htmlFor={`${question.id}-${idx}`} className="ml-3 block text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+                      <label htmlFor={`${question.id}-${idx}`} className="ml-3 block text-[color:var(--foreground)]">
                         {typeof option === 'string' ? option : option.label}
                       </label>
                     </div>
@@ -475,9 +475,9 @@ export default function FormEmbedPage() {
                             handleAnswerChange(question.id, currentValue.filter((v: string) => v !== e.target.value));
                           }
                         }}
-                        className="h-4 w-4 rounded text-[color:var(--brand-primary-light)] focus:ring-[color:var(--brand-primary-light)] dark:text-[color:var(--brand-accent)]"
+                        className="h-4 w-4 rounded text-[color:var(--primary)] focus:ring-[color:var(--primary)]"
                       />
-                      <label htmlFor={`${question.id}-${idx}`} className="ml-3 block text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary)]">
+                      <label htmlFor={`${question.id}-${idx}`} className="ml-3 block text-[color:var(--foreground)]">
                         {typeof option === 'string' ? option : option.label}
                       </label>
                     </div>
@@ -491,7 +491,7 @@ export default function FormEmbedPage() {
             <Button
               type="submit"
               isLoading={isSubmitting}
-              className="px-8 py-3 text-white dark:text-white"
+              className="px-8 py-3 text-white"
               style={{
                 background: 'linear-gradient(to right, #2563eb, #0ea5e9)',
               }}
@@ -507,7 +507,7 @@ export default function FormEmbedPage() {
               href="https://ziyaforms.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-[color:var(--text-muted)] hover:text-[color:var(--text-primary-light)] dark:text-[color:var(--text-secondary)] dark:hover:text-[color:var(--text-primary)]"
+              className="text-xs text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)] dark:hover:text-[color:var(--foreground)]"
             >
               Powered by Ziya Forms
             </a>

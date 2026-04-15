@@ -21,7 +21,7 @@ type UsersTableProps = {
 
 const statusStyles = {
   active: 'bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20',
-  inactive: 'bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-500/10 dark:text-rose-300 dark:ring-rose-500/20',
+  inactive: 'bg-rose-50 text-rose-700 ring-rose-200   ',
 };
 
 export function UsersTable({
@@ -41,13 +41,13 @@ export function UsersTable({
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_15px_60px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-slate-950">
+    <div className="overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_15px_60px_rgba(15,23,42,0.08)]">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
-          <thead className="bg-slate-50/80 dark:bg-slate-900/60">
+          <thead className="bg-[color:var(--background)]/80 /60">
             <tr>
               {['Name', 'Email', 'Status', 'Role', 'Forms Count', 'Embedded Forms Count', 'Created At', 'Actions'].map((label) => (
-                <th key={label} className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                <th key={label} className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--muted-foreground)]">
                   {label}
                 </th>
               ))}
@@ -57,7 +57,7 @@ export function UsersTable({
             {loading ? (
               <tr>
                 <td colSpan={8} className="px-5 py-16 text-center">
-                  <div className="inline-flex items-center gap-3 text-slate-500">
+                  <div className="inline-flex items-center gap-3 text-[color:var(--muted-foreground)]">
                     <Loader2 className="h-5 w-5 animate-spin" />
                     Loading users...
                   </div>
@@ -66,34 +66,34 @@ export function UsersTable({
             ) : users.length === 0 ? (
               <tr>
                 <td colSpan={8} className="px-5 py-16 text-center">
-                  <div className="mx-auto flex max-w-md flex-col items-center gap-3 text-slate-500">
-                    <div className="rounded-full bg-slate-100 p-4 dark:bg-slate-900">
-                      <UserCircle2 className="h-8 w-8 text-slate-400" />
+                  <div className="mx-auto flex max-w-md flex-col items-center gap-3 text-[color:var(--muted-foreground)]">
+                    <div className="rounded-full bg-[color:var(--muted)] p-4">
+                      <UserCircle2 className="h-8 w-8 text-[color:var(--muted-foreground)]" />
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">No users found</h3>
+                    <h3 className="text-lg font-semibold text-[color:var(--foreground)]">No users found</h3>
                     <p className="text-sm">Try clearing the search or changing the status filter.</p>
                   </div>
                 </td>
               </tr>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="bg-white/80 transition hover:bg-slate-50 dark:bg-slate-950/40 dark:hover:bg-slate-900/40">
+                <tr key={user.id} className="bg-[color:var(--card)]/80 transition hover:bg-[color:var(--background)] /40 dark:hover:bg-[color:var(--background)]/40">
                   <td className="px-5 py-4">
-                    <div className="font-medium text-slate-900 dark:text-white">{user.name}</div>
+                    <div className="font-medium text-[color:var(--foreground)]">{user.name}</div>
                     {user.role === 'super_admin' && (
-                      <div className="mt-1 text-xs font-medium uppercase tracking-wide text-blue-600 dark:text-blue-400">Super Admin</div>
+                      <div className="mt-1 text-xs font-medium uppercase tracking-wide text-blue-600">Super Admin</div>
                     )}
                   </td>
-                  <td className="px-5 py-4 text-sm text-slate-600 dark:text-slate-300">{user.email}</td>
+                  <td className="px-5 py-4 text-sm text-[color:var(--muted-foreground)]">{user.email}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 ${statusStyles[user.status]}`}>
                       {user.status === 'active' ? 'Active' : 'Inactive'}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-sm capitalize text-slate-600 dark:text-slate-300">{user.role.replace('_', ' ')}</td>
-                  <td className="px-5 py-4 text-sm font-semibold text-slate-900 dark:text-white">{user.formsCount}</td>
-                  <td className="px-5 py-4 text-sm font-semibold text-slate-900 dark:text-white">{user.embeddedFormsCount}</td>
-                  <td className="px-5 py-4 text-sm text-slate-600 dark:text-slate-300">
+                  <td className="px-5 py-4 text-sm capitalize text-[color:var(--muted-foreground)]">{user.role.replace('_', ' ')}</td>
+                  <td className="px-5 py-4 text-sm font-semibold text-[color:var(--foreground)]">{user.formsCount}</td>
+                  <td className="px-5 py-4 text-sm font-semibold text-[color:var(--foreground)]">{user.embeddedFormsCount}</td>
+                  <td className="px-5 py-4 text-sm text-[color:var(--muted-foreground)]">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-5 py-4">
@@ -114,18 +114,18 @@ export function UsersTable({
         </table>
       </div>
 
-      <div className="flex flex-col gap-4 border-t border-slate-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          Showing page <span className="font-semibold text-slate-900 dark:text-white">{page}</span> of{' '}
-          <span className="font-semibold text-slate-900 dark:text-white">{totalPages}</span> ·{' '}
-          <span className="font-semibold text-slate-900 dark:text-white">{total}</span> total users
+      <div className="flex flex-col gap-4 border-t border-[color:var(--border)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[color:var(--muted-foreground)]">
+          Showing page <span className="font-semibold text-[color:var(--foreground)]">{page}</span> of{' '}
+          <span className="font-semibold text-[color:var(--foreground)]">{totalPages}</span> ·{' '}
+          <span className="font-semibold text-[color:var(--foreground)]">{total}</span> total users
         </p>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => onPageChange(Math.max(1, page - 1))}
             disabled={page <= 1 || loading}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+            className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm font-medium text-[color:var(--muted-foreground)] shadow-sm transition hover:bg-[color:var(--background)] disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-slate-800"
           >
             <ChevronLeft className="h-4 w-4" />
             Previous
@@ -134,7 +134,7 @@ export function UsersTable({
             type="button"
             onClick={() => onPageChange(Math.min(totalPages, page + 1))}
             disabled={page >= totalPages || loading}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+            className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm font-medium text-[color:var(--muted-foreground)] shadow-sm transition hover:bg-[color:var(--background)] disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-slate-800"
           >
             Next
             <ChevronRight className="h-4 w-4" />

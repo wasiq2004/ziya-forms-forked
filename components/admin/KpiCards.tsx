@@ -18,15 +18,15 @@ type CardShellProps = {
 };
 
 const CardShell = ({ icon: Icon, title, value, helper, accent }: CardShellProps) => (
-  <div className={`rounded-3xl border border-white/20 bg-gradient-to-br p-5 shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur dark:bg-slate-950/40 ${accent}`}>
+  <div className={`rounded-3xl border border-white/20 bg-gradient-to-br p-5 shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur /40 ${accent}`}>
     <div className="flex items-start justify-between gap-4">
       <div>
-        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
-        <h3 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{value}</h3>
-        {helper && <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{helper}</p>}
+        <p className="text-sm font-medium text-[color:var(--muted-foreground)]">{title}</p>
+        <h3 className="mt-2 text-3xl font-bold tracking-tight text-[color:var(--foreground)]">{value}</h3>
+        {helper && <p className="mt-2 text-sm text-[color:var(--muted-foreground)]">{helper}</p>}
       </div>
-      <div className="rounded-2xl bg-slate-900/5 p-3 dark:bg-white/10">
-        <Icon className="h-6 w-6 text-slate-700 dark:text-white" />
+      <div className="rounded-2xl bg-[color:var(--background)]/5 p-3 /10">
+        <Icon className="h-6 w-6 text-[color:var(--muted-foreground)]" />
       </div>
     </div>
   </div>

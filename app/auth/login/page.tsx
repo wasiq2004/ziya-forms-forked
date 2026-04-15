@@ -1,67 +1,69 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Chrome } from 'lucide-react';
 import { getSession, signIn, useSession } from 'next-auth/react';
+import { Chrome, ShieldCheck, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/Button';
+import { useTheme } from '@/components/ui/ThemeProvider';
 
 const getDestinationForRole = (role?: string | null) => {
   return role === 'super_admin' ? '/admin/dashboard' : '/dashboard';
 };
 
 export default function LoginPage() {
+  const { theme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // Check if user is already logged in
   useEffect(() => {
-    console.log('LoginPage useEffect - status:', status);
-    if (status === 'authenticated') {
-      const redirectAuthenticatedUser = async () => {
-        const currentSession = session ?? (await getSession());
-        console.log('User already authenticated, redirecting by role');
-        router.replace(getDestinationForRole(currentSession?.user?.role));
-      };
-
-      void redirectAuthenticatedUser();
+    if (status !== 'authenticated') {
+      return;
     }
+
+    const redirectAuthenticatedUser = async () => {
+      const currentSession = session ?? (await getSession());
+      router.replace(getDestinationForRole(currentSession?.user?.role));
+    };
+
+    void redirectAuthenticatedUser();
   }, [session, status, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
-      console.log('Attempting to sign in with credentials:', { email });
       const result = await signIn('credentials', {
         email,
         password,
-        redirect: false, // We'll handle the redirect manually
+        redirect: false,
       });
-      
-      console.log('Sign in result:', result);
-      
+
       if (result?.error) {
         setError('Invalid email or password');
-        setLoading(false);
-      } else if (result?.ok) {
-        console.log('Sign in successful, redirecting by role');
+        return;
+      }
+
+      if (result?.ok) {
         const currentSession = await getSession();
         router.replace(getDestinationForRole(currentSession?.user?.role));
-      } else {
-        setError('An unexpected error occurred. Please try again.');
-        setLoading(false);
+        return;
       }
-    } catch (err) {
-      console.error('Sign in error:', err);
+
       setError('An unexpected error occurred. Please try again.');
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -69,138 +71,148 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError('');
+
     try {
-      console.log('Attempting Google sign in');
-      // For Google sign-in, we let NextAuth handle the redirect
       const result = await signIn('google', { callbackUrl: '/dashboard' });
-      console.log('Google sign in result:', result);
-      
-      // If there's an error, handle it
+
       if (result?.error) {
-        setError('Failed to sign in with Google: ' + result.error);
+        setError(`Failed to sign in with Google: ${result.error}`);
         setLoading(false);
       }
-    } catch (err) {
-      console.error('Google sign in error:', err);
+    } catch {
       setError('Failed to sign in with Google. Please try again.');
       setLoading(false);
     }
   };
 
-  // Don't render anything while checking session status
-  if (status === 'loading') {
+  if (status === 'loading' || status === 'authenticated') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  // If already authenticated, don't show login form
-  if (status === 'authenticated') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[color:var(--background)]">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-[color:var(--primary)]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-900 dark:to-gray-800 px-4">
+    <div className="min-h-screen px-4 py-10 bg-[color:var(--background)] dark:bg-[color:var(--background)] sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md"
+        className="mx-auto w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/70 bg-[color:var(--card)]/90 shadow-[0_24px_90px_rgba(15,23,42,0.12)] backdrop-blur /70"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold gradient-text mb-2 font-[family-name:var(--font-poppins)]">
-            Welcome to Ziya Forms
+        <div className="border-b border-[color:var(--border)]/70 bg-[color:var(--background)]/80 px-6 py-6 text-center /40 sm:px-8">
+          <div className="flex justify-center mb-8">
+            <Image
+              src={theme === 'dark' ? "/ziyavoicelogo.png" : "/ziyavoiceblack.png"}
+              alt="Ziya Forms"
+              width={220}
+              height={60}
+              className="h-14 w-auto object-contain"
+              priority
+            />
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--muted)] bg-[color:var(--muted)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-[color:var(--primary)]">
+            <Sparkles className="h-3.5 w-3.5" />
+            Secure access
+          </div>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
+            Welcome back
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Sign in to start creating amazing forms
+          <p className="mt-2 text-sm leading-6 text-[color:var(--muted-foreground)]">
+            Sign in to continue building and managing forms.
           </p>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {error}
-          </div>
-        )}
+        <div className="px-6 py-6 sm:px-8">
+          {error && (
+            <div className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+              {error}
+            </div>
+          )}
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="mb-1 block text-sm font-medium text-[color:var(--foreground)]">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--muted)]/70 dark:focus:border-[color:var(--gradient-end)]"
+                placeholder="your@email.com"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="••••••••"
-              required
-            />
+            <div>
+              <label htmlFor="password" className="mb-1 block text-sm font-medium text-[color:var(--foreground)]">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 pr-10 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--muted)]/70 dark:focus:border-[color:var(--gradient-end)]"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)] transition"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <Link href="/auth/forgot-password" className="text-xs font-medium text-[color:var(--primary)] hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full justify-center gap-3 py-3 text-base font-semibold shadow-lg shadow-blue-500/20"
+              disabled={loading}
+            >
+              {loading ? <span>Signing in...</span> : <span>Sign in</span>}
+            </Button>
+          </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-[color:var(--border)]" />
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--muted-foreground)]">or</span>
+            <div className="h-px flex-1 bg-[color:var(--border)]" />
           </div>
 
           <Button
-            type="submit"
-            variant="primary"
-            className="w-full flex items-center justify-center gap-3 text-lg py-3"
+            variant="outline"
+            className="w-full justify-center gap-3 py-3 text-base font-semibold"
+            onClick={handleGoogleSignIn}
             disabled={loading}
           >
-            {loading ? (
-              <span>Signing in...</span>
-            ) : (
-              <span>Sign in</span>
-            )}
+            <Chrome className="h-5 w-5" />
+            Sign in with Google
           </Button>
-        </form>
 
-        <div className="my-4 flex items-center">
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-          <span className="mx-4 text-gray-500 dark:text-gray-400 text-sm">OR</span>
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-        </div>
-
-        <Button
-          variant="outline"
-          className="w-full flex items-center justify-center gap-3 text-lg py-3"
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-        >
-          <Chrome className="w-5 h-5" />
-          Sign in with Google
-        </Button>
-
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="mt-6 rounded-2xl bg-[color:var(--background)] px-4 py-3 text-center text-sm text-[color:var(--muted-foreground)] /60">
             Don't have an account?{' '}
-            <a href="/auth/register" className="text-blue-600 hover:underline dark:text-blue-400">
+            <Link href="/auth/register" className="font-semibold text-[color:var(--primary)] hover:underline">
               Create one
-            </a>
-          </p>
-        </div>
+            </Link>
+          </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            By signing in, you agree to our Terms of Service and Privacy Policy
-          </p>
+          <div className="mt-4 flex items-center gap-2 text-xs text-[color:var(--muted-foreground)]">
+            <ShieldCheck className="h-4 w-4 text-[color:var(--primary)]" />
+            By signing in, you agree to our Terms of Service and Privacy Policy.
+          </div>
         </div>
       </motion.div>
     </div>

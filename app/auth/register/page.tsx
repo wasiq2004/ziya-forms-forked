@@ -1,13 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/Button';
-import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Chrome } from 'lucide-react';
 import { signIn } from 'next-auth/react';
+import { Chrome, ShieldCheck, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/Button';
+import { useTheme } from '@/components/ui/ThemeProvider';
 
 export default function RegisterPage() {
+  const { theme } = useTheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,17 +23,17 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    
+
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
     }
-    
+
     setLoading(true);
     setError('');
     setSuccess(false);
@@ -49,25 +53,26 @@ export default function RegisterPage() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        setSuccess(true);
-        // Automatically sign in the user after successful registration
-        const result = await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
-        });
-        
-        if (!result?.error) {
-          router.push('/dashboard');
-          router.refresh();
-        } else {
-          setError('Registration successful, but login failed. Please try logging in manually.');
-        }
-      } else {
+      if (!response.ok) {
         setError(data.error || 'Registration failed. Please try again.');
+        return;
       }
-    } catch (err) {
+
+      setSuccess(true);
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!result?.error) {
+        router.push('/dashboard');
+        router.refresh();
+        return;
+      }
+
+      setError('Registration successful, but login failed. Please try logging in manually.');
+    } catch {
       setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -78,147 +83,156 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await signIn('google', { callbackUrl: '/dashboard' });
-    } catch (err) {
+    } catch {
       setError('Failed to sign in with Google. Please try again.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-900 dark:to-gray-800 px-4">
+    <div className="min-h-screen px-4 py-10 bg-[color:var(--background)] dark:bg-[color:var(--background)] sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md"
+        className="mx-auto w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/70 bg-[color:var(--card)]/90 shadow-[0_24px_90px_rgba(15,23,42,0.12)] backdrop-blur /70"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold gradient-text mb-2 font-[family-name:var(--font-poppins)]">
-            Create Account
+        <div className="border-b border-[color:var(--border)]/70 bg-[color:var(--background)]/80 px-6 py-6 text-center /40 sm:px-8">
+          <div className="flex justify-center mb-6">
+            <Image
+              src={theme === 'dark' ? "/ziyavoicelogo.png" : "/ziyavoiceblack.png"}
+              alt="Ziya Forms"
+              width={160}
+              height={50}
+              className="h-10 w-auto"
+              priority
+            />
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--muted)] bg-[color:var(--muted)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-[color:var(--primary)]">
+            <Sparkles className="h-3.5 w-3.5" />
+            Start free
+          </div>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
+            Create your account
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Sign up to start creating amazing forms with Ziya Forms
+          <p className="mt-2 text-sm leading-6 text-[color:var(--muted-foreground)]">
+            Set up your workspace and start building forms in minutes.
           </p>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {error}
-          </div>
-        )}
+        <div className="px-6 py-6 sm:px-8">
+          {error && (
+            <div className="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+              {error}
+            </div>
+          )}
 
-        {success && (
-          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md text-sm">
-            Account created successfully! Logging you in...
-          </div>
-        )}
+          {success && (
+            <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-200">
+              Account created successfully! Logging you in...
+            </div>
+          )}
 
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Full Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="John Doe"
-              required
-            />
-          </div>
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="mb-1 block text-sm font-medium text-[color:var(--foreground)]">
+                Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--muted)]/70 dark:focus:border-[color:var(--gradient-end)]"
+                placeholder="John Doe"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="email" className="mb-1 block text-sm font-medium text-[color:var(--foreground)]">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--muted)]/70 dark:focus:border-[color:var(--gradient-end)]"
+                placeholder="your@email.com"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="••••••••"
-              required
-            />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Must be at least 6 characters
-            </p>
-          </div>
+            <div>
+              <label htmlFor="password" className="mb-1 block text-sm font-medium text-[color:var(--foreground)]">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--muted)]/70 dark:focus:border-[color:var(--gradient-end)]"
+                placeholder="••••••••"
+                required
+              />
+              <p className="mt-1 text-xs text-[color:var(--muted-foreground)]">
+                Must be at least 6 characters.
+              </p>
+            </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              placeholder="••••••••"
-              required
-            />
+            <div>
+              <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-[color:var(--foreground)]">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--muted)]/70 dark:focus:border-[color:var(--gradient-end)]"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full justify-center gap-3 py-3 text-base font-semibold shadow-lg shadow-blue-500/20"
+              disabled={loading}
+            >
+              {loading ? <span>Creating account...</span> : <span>Create account</span>}
+            </Button>
+          </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-[color:var(--border)]" />
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--muted-foreground)]">or</span>
+            <div className="h-px flex-1 bg-[color:var(--border)]" />
           </div>
 
           <Button
-            type="submit"
-            variant="primary"
-            className="w-full flex items-center justify-center gap-3 text-lg py-3"
+            variant="outline"
+            className="w-full justify-center gap-3 py-3 text-base font-semibold"
+            onClick={handleGoogleSignIn}
             disabled={loading}
           >
-            {loading ? (
-              <span>Creating account...</span>
-            ) : (
-              <span>Create Account</span>
-            )}
+            <Chrome className="h-5 w-5" />
+            Sign up with Google
           </Button>
-        </form>
 
-        <div className="my-4 flex items-center">
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-          <span className="mx-4 text-gray-500 dark:text-gray-400 text-sm">OR</span>
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-        </div>
-
-        <Button
-          variant="outline"
-          className="w-full flex items-center justify-center gap-3 text-lg py-3"
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-        >
-          <Chrome className="w-5 h-5" />
-          Sign up with Google
-        </Button>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="mt-6 rounded-2xl bg-[color:var(--background)] px-4 py-3 text-center text-sm text-[color:var(--muted-foreground)] /60">
             Already have an account?{' '}
-            <a href="/auth/login" className="text-blue-600 hover:underline dark:text-blue-400">
+            <Link href="/auth/login" className="font-semibold text-[color:var(--primary)] hover:underline">
               Sign in
-            </a>
-          </p>
-        </div>
+            </Link>
+          </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            By creating an account, you agree to our Terms of Service and Privacy Policy
-          </p>
+          <div className="mt-4 flex items-center gap-2 text-xs text-[color:var(--muted-foreground)]">
+            <ShieldCheck className="h-4 w-4 text-[color:var(--primary)]" />
+            By creating an account, you agree to our Terms of Service and Privacy Policy.
+          </div>
         </div>
       </motion.div>
     </div>
