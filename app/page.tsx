@@ -149,8 +149,8 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold text-[color:var(--foreground)] mb-6 uppercase tracking-widest text-sm">Company</h4>
               <ul className="space-y-4 text-[color:var(--muted-foreground)]">
-                <li><Link href="#" className="hover:text-[color:var(--primary)] transition-colors">About Us</Link></li>
-                <li><Link href="#" className="hover:text-[color:var(--primary)] transition-colors">Contact</Link></li>
+                <li><Link href="https://ziyasuite.io/about" className="hover:text-[color:var(--primary)] transition-colors">About Us</Link></li>
+                <li><Link href="https://ziyasuite.io/contact" className="hover:text-[color:var(--primary)] transition-colors">Contact</Link></li>
                 <li><Link href="#" className="hover:text-[color:var(--primary)] transition-colors">Terms</Link></li>
               </ul>
             </div>

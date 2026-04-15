@@ -7,6 +7,7 @@ import {
   createResponse,
   getResponseByEditToken,
   getResponseByEmail,
+  getUserById,
   replaceAnswersForResponse,
   updateResponseEmailAndSource,
   updateResponseQuizScore,
@@ -135,7 +136,26 @@ export async function saveFormSubmission(form: FormWithQuestions, responseData: 
     await updateResponseQuizScore(responseId, quizResult.score, quizResult.maxScore);
   }
 
-  if (getResponseCopyMode(settings) === 'always' && respondentEmail) {
+  if (settings.notify_admin_on_response) {
+    const ownerRecord = form.owner_email ? null : await getUserById(form.user_id);
+    const responseRecipientEmail = (form.owner_email || ownerRecord?.email || '').trim() || null;
+    try {
+      await sendAdminResponseNotificationEmail({
+        form,
+        response: savedResponse as any,
+        updatedExisting,
+        recipientEmail: responseRecipientEmail,
+      });
+    } catch (error) {
+      console.error('Failed to send admin notification email:', error);
+    }
+  }
+
+  const shouldSendRespondentCopy =
+    respondentEmail &&
+    (getResponseCopyMode(settings) === 'always' || settings.notify_admin_on_response);
+
+  if (shouldSendRespondentCopy) {
     try {
       await sendResponseCopyEmail({
         form,
@@ -144,18 +164,6 @@ export async function saveFormSubmission(form: FormWithQuestions, responseData: 
       });
     } catch (error) {
       console.error('Failed to send response copy email:', error);
-    }
-  }
-
-  if (settings.notify_admin_on_response) {
-    try {
-      await sendAdminResponseNotificationEmail({
-        form,
-        response: savedResponse as any,
-        updatedExisting,
-      });
-    } catch (error) {
-      console.error('Failed to send admin notification email:', error);
     }
   }
 

@@ -9,6 +9,7 @@ import type { FormWithQuestions } from '@/lib/types/database';
 import { CheckCircle, BarChart3, PencilLine, Repeat2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useFormDraftAutosave } from '@/lib/useFormDraftAutosave';
+import { shouldShowRespondentEmailField, requiresRespondentEmail } from '@/lib/form-settings';
 
 export default function FormViewPage() {
   const router = useRouter();
@@ -113,8 +114,8 @@ export default function FormViewPage() {
     return questions.sort(() => Math.random() - 0.5);
   }, [form]);
 
-  const shouldCollectEmail = !!form && (form.settings?.collect_email_addresses !== 'off' || form.settings?.limit_to_one_response);
-  const isEmailRequired = !!form && (form.settings?.collect_email_addresses === 'required' || form.settings?.limit_to_one_response);
+  const shouldCollectEmail = !!form && shouldShowRespondentEmailField(form.settings);
+  const isEmailRequired = !!form && requiresRespondentEmail(form.settings);
   const answeredCount = Object.values(answers).filter((value) => {
     if (Array.isArray(value)) return value.length > 0;
     return String(value ?? '').trim().length > 0;

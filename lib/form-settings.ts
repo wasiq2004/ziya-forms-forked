@@ -35,9 +35,20 @@ export function getResponseCopyMode(settings?: Partial<FormSettings> | null): Re
 
 export function requiresRespondentEmail(settings?: Partial<FormSettings> | null): boolean {
   const normalized = normalizeFormSettings(settings);
-  return normalized.collect_email_addresses === 'required' || normalized.limit_to_one_response;
+  return (
+    normalized.collect_email_addresses === 'required' ||
+    normalized.limit_to_one_response ||
+    normalized.send_response_copy === 'always' ||
+    normalized.notify_admin_on_response
+  );
 }
 
 export function shouldShowRespondentEmailField(settings?: Partial<FormSettings> | null): boolean {
-  return normalizeFormSettings(settings).collect_email_addresses !== 'off' || normalizeFormSettings(settings).limit_to_one_response;
+  const normalized = normalizeFormSettings(settings);
+  return (
+    normalized.collect_email_addresses !== 'off' ||
+    normalized.limit_to_one_response ||
+    normalized.send_response_copy === 'always' ||
+    normalized.notify_admin_on_response
+  );
 }

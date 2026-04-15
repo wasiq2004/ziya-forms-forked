@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
-import { getSmtpSettings, saveSmtpSettings } from '@/lib/mysql/platform';
+import { getStoredSmtpSettings, saveSmtpSettings } from '@/lib/mysql/platform';
 
 export async function GET() {
   try {
@@ -8,7 +8,7 @@ export async function GET() {
     if (!user) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     if (user.role !== 'super_admin') return NextResponse.json({ message: 'Access denied' }, { status: 403 });
 
-    const settings = await getSmtpSettings();
+    const settings = await getStoredSmtpSettings();
     return NextResponse.json({ settings });
   } catch (error) {
     console.error('Error in GET /api/admin/smtp:', error);
@@ -41,7 +41,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ message: 'Failed to save SMTP settings' }, { status: 400 });
     }
 
-    const settings = await getSmtpSettings();
+    const settings = await getStoredSmtpSettings();
     return NextResponse.json({ settings });
   } catch (error) {
     console.error('Error in PUT /api/admin/smtp:', error);

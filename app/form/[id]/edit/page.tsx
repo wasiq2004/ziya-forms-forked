@@ -356,6 +356,7 @@ export default function FormEditPage() {
               cropHint="Adjust the crop to define your form's identity."
               previewClassName="h-full w-full object-cover"
               uploadScope="forms/banners"
+              entityId={formId}
               className="px-8 pb-8"
             />
           </div>

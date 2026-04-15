@@ -221,7 +221,7 @@ export async function getFormWithQuestions(id: string) {
   try {
     // Get the form
     const [formRows]: any = await connection.execute(
-      `SELECT f.*, COALESCE(u.billing_plan, 'free') AS owner_plan
+      `SELECT f.*, COALESCE(u.billing_plan, 'free') AS owner_plan, u.email AS owner_email
        FROM forms f
        INNER JOIN users u ON u.id = f.user_id
        WHERE f.id = ?`,
