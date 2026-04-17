@@ -56,6 +56,37 @@ function buildResponseRows(params: {
     .join('');
 }
 
+function buildResponseCopyCards(params: {
+  form: FormWithQuestions;
+  response: ResponseWithAnswers;
+}) {
+  return params.form.questions
+    .map((question, index) => {
+      const answer = params.response.answers.find(
+        (item) => item.question_id === question.id
+      );
+      const value = formatAnswerValue(answer as any) || 'No answer';
+
+      return `
+        <tr>
+          <td style="padding:0 0 16px;">
+            <div style="border:1px solid #e5e7eb;border-radius:18px;overflow:hidden;background:#ffffff;box-shadow:0 8px 24px rgba(15,23,42,0.04);">
+              <div style="padding:16px 18px;background:#f8fafc;border-bottom:1px solid #e5e7eb;">
+                <div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#0f172a;font-weight:700;">Question ${index + 1}</div>
+                <div style="margin-top:6px;font-size:16px;line-height:1.4;color:#0f172a;font-weight:700;">${escapeHtml(question.title)}</div>
+              </div>
+              <div style="padding:18px;">
+                <div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#64748b;font-weight:700;margin-bottom:8px;">Your answer</div>
+                <div style="font-size:15px;line-height:1.7;color:#111827;white-space:pre-wrap;">${escapeHtml(value)}</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    })
+    .join('');
+}
+
 export async function sendResponseCopyEmail(params: {
   form: FormWithQuestions;
   respondentEmail: string;
@@ -89,11 +120,79 @@ export async function sendResponseCopyEmail(params: {
     }),
   ];
 
+  const submittedAt = new Date(params.response.submitted_at).toLocaleString();
+  const source = params.response.submission_source || 'direct';
+  const responseCopyHtml = `
+    <div style="margin:0;padding:0;background:#f8fafc;">
+      <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Your response for ${escapeHtml(params.form.title)} is ready.</div>
+      <div style="max-width:760px;margin:0 auto;padding:32px 16px 40px;">
+        <div style="border-radius:28px;overflow:hidden;background:#ffffff;border:1px solid #e5e7eb;box-shadow:0 24px 80px rgba(15,23,42,0.08);">
+          <div style="padding:28px 28px 24px;background:linear-gradient(135deg,#2563eb 0%,#0ea5e9 55%,#14b8a6 100%);color:#ffffff;">
+            <div style="display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.16);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;">
+              Ziya Forms
+            </div>
+            <h1 style="margin:18px 0 8px;font-size:28px;line-height:1.15;font-weight:800;">Your response is saved</h1>
+            <p style="margin:0;font-size:15px;line-height:1.7;max-width:560px;opacity:.95;">
+              Thanks for submitting <strong>${escapeHtml(params.form.title)}</strong>. Below is a clean copy of everything you sent.
+            </p>
+          </div>
+
+          <div style="padding:24px 28px 8px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:12px 0;">
+              <tr>
+                <td style="width:50%;padding:0 0 12px;">
+                  <div style="border:1px solid #e5e7eb;border-radius:20px;padding:16px 18px;background:#f8fafc;">
+                    <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#64748b;font-weight:700;">Form</div>
+                    <div style="margin-top:6px;font-size:16px;font-weight:700;color:#0f172a;line-height:1.4;">${escapeHtml(params.form.title)}</div>
+                  </div>
+                </td>
+                <td style="width:50%;padding:0 0 12px;">
+                  <div style="border:1px solid #e5e7eb;border-radius:20px;padding:16px 18px;background:#f8fafc;">
+                    <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#64748b;font-weight:700;">Submitted</div>
+                    <div style="margin-top:6px;font-size:15px;font-weight:700;color:#0f172a;line-height:1.5;">${escapeHtml(submittedAt)}</div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0;">
+              <tr>
+                <td style="padding:8px 0 20px;">
+                  <div style="border:1px solid #e5e7eb;border-radius:20px;padding:16px 18px;background:#ffffff;">
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                      <div style="padding:8px 12px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700;">Source: ${escapeHtml(source)}</div>
+                      <div style="padding:8px 12px;border-radius:999px;background:#f0fdf4;color:#166534;font-size:12px;font-weight:700;">Recipient: ${escapeHtml(params.respondentEmail)}</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+              ${buildResponseCopyCards({ form: params.form, response: params.response })}
+            </table>
+
+            <div style="padding:8px 0 12px;">
+              <div style="border-radius:20px;padding:18px 20px;background:#f8fafc;border:1px dashed #cbd5e1;color:#475569;font-size:13px;line-height:1.7;">
+                If anything looks incorrect, you can submit again or contact the form owner for help.
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:18px 28px 28px;color:#94a3b8;font-size:12px;line-height:1.7;text-align:center;">
+            Sent by Ziya Forms automatically after your submission.
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
   await transporter.sendMail({
     from: `${smtpSettings.from_name} <${smtpSettings.from_email}>`,
     to: params.respondentEmail,
     subject: `Copy of your response: ${params.form.title}`,
     text: lines.join('\n'),
+    html: responseCopyHtml,
   });
 
   return { sent: true as const };
@@ -102,11 +201,14 @@ export async function sendResponseCopyEmail(params: {
 export async function sendAdminResponseNotificationEmail(params: {
   form: FormWithQuestions;
   response: ResponseWithAnswers; updatedExisting?: boolean;
+  recipientEmail?: string | null;
 }) {
   const smtpSettings = await getSmtpSettings();
 
-  if (!smtpSettings || !smtpSettings.admin_email) {
-    console.error('SMTP not configured or admin_email missing');
+  const recipientEmail = (params.recipientEmail || smtpSettings?.admin_email || '').trim();
+
+  if (!smtpSettings || !recipientEmail) {
+    console.error('SMTP not configured or recipient email missing');
     return { sent: false, reason: 'notification_unavailable' as const };
   }
 
@@ -156,7 +258,7 @@ export async function sendAdminResponseNotificationEmail(params: {
 
   await transporter.sendMail({
     from: `${smtpSettings.from_name} <${smtpSettings.from_email}>`,
-    to: smtpSettings.admin_email,
+    to: recipientEmail,
     subject,
     text: textLines.join('\n'),
     html: htmlStart,
@@ -181,7 +283,7 @@ export async function sendPasswordResetEmail(params: {
     port: smtpSettings.port,
     secure: smtpSettings.port === 465 ? true : smtpSettings.secure,
     auth: {
-      user: smtpSettings.from_email,
+      user: smtpSettings.user,
       pass: smtpSettings.password,
     },
   });

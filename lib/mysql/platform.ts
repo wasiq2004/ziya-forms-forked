@@ -37,6 +37,22 @@ const mapTemplate = (row: TemplateRow): TemplateForm => ({
   updated_at: row.updated_at,
 });
 
+const normalizeSenderEmail = (userEmail: string, fallbackEmail: string) =>
+  (userEmail || fallbackEmail || '').trim();
+
+const mapSmtpRow = (row: any): SmtpSettings => ({
+  id: String(row.id),
+  host: (row.host || '').trim(),
+  port: Number(row.port),
+  user: (row.user || '').trim(),
+  password: (row.password || '').trim(),
+  secure: !!row.secure,
+  from_email: normalizeSenderEmail((row.user || '').trim(), (row.from_email || '').trim()),
+  from_name: (row.from_name || '').trim(),
+  admin_email: (row.admin_email || '').trim(),
+  updated_at: row.updated_at,
+});
+
 export async function getPublicTemplates(): Promise<TemplateForm[]> {
   await ensureAdminSchema();
   const connection = await pool.getConnection();
@@ -190,19 +206,54 @@ export async function getSmtpSettings(): Promise<SmtpSettings | null> {
       `SELECT * FROM smtp_settings ORDER BY updated_at DESC LIMIT 1`
     );
     const row = rows[0];
-    if (!row) return null;
-    return {
-      id: String(row.id),
-      host: (row.host || '').trim(),
-      port: Number(row.port),
-      user: (row.user || '').trim(),
-      password: (row.password || '').trim(),
-      secure: !!row.secure,
-      from_email: (row.from_email || '').trim(),
-      from_name: (row.from_name || '').trim(),
-      admin_email: (row.admin_email || '').trim(),
-      updated_at: row.updated_at,
-    };
+    if (row) {
+      return mapSmtpRow(row);
+    }
+
+    const envHost = (process.env.EMAIL_SERVER_HOST || '').trim();
+    const envPort = Number(process.env.EMAIL_SERVER_PORT || 0);
+    const envUser = (process.env.EMAIL_SERVER_USER || process.env.EMAIL_FROM || '').trim();
+    const envPassword = (process.env.EMAIL_SERVER_PASSWORD || '').trim();
+    const envFromEmail = (envUser || process.env.EMAIL_FROM || '').trim();
+    const envFromName = (process.env.EMAIL_FROM_NAME || 'Ziya Forms').trim();
+    const envAdminEmail = (
+      process.env.EMAIL_ADMIN_EMAIL ||
+      process.env.EMAIL_NOTIFY_EMAIL ||
+      process.env.EMAIL_SERVER_ADMIN_EMAIL ||
+      ''
+    ).trim();
+
+    if (envHost && envPort && envUser && envPassword && envFromEmail) {
+      return {
+        id: 'env',
+        host: envHost,
+        port: envPort,
+        user: envUser,
+        password: envPassword,
+        secure: String(process.env.EMAIL_SERVER_SECURE || '').toLowerCase() === 'true' || envPort === 465,
+        from_email: normalizeSenderEmail(envUser, envFromEmail),
+        from_name: envFromName,
+        admin_email: envAdminEmail,
+        updated_at: undefined,
+      };
+    }
+
+    return null;
+  } finally {
+    connection.release();
+  }
+}
+
+export async function getStoredSmtpSettings(): Promise<SmtpSettings | null> {
+  await ensureAdminSchema();
+  const connection = await pool.getConnection();
+
+  try {
+    const [rows]: any = await connection.execute(
+      `SELECT * FROM smtp_settings ORDER BY updated_at DESC LIMIT 1`
+    );
+    const row = rows[0];
+    return row ? mapSmtpRow(row) : null;
   } finally {
     connection.release();
   }
@@ -213,9 +264,12 @@ export async function saveSmtpSettings(settings: SmtpSettings) {
   const connection = await pool.getConnection();
 
   try {
-    const existing = await getSmtpSettings();
+    const [rows]: any = await connection.execute(
+      `SELECT id FROM smtp_settings ORDER BY updated_at DESC LIMIT 1`
+    );
+    const existingRow = rows[0];
 
-    if (!existing) {
+    if (!existingRow) {
       const [result]: any = await connection.execute(
         `INSERT INTO smtp_settings (host, port, user, password, secure, from_email, from_name, admin_email)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -246,7 +300,7 @@ export async function saveSmtpSettings(settings: SmtpSettings) {
         settings.from_email,
         settings.from_name,
         settings.admin_email,
-        existing.id,
+        existingRow.id,
       ]
     );
 

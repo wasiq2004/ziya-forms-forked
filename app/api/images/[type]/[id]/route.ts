@@ -5,10 +5,10 @@ export const runtime = 'nodejs';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { type: string; id: string } }
+  { params }: { params: Promise<{ type: string; id: string }> }
 ) {
   try {
-    const { type, id } = params;
+    const { type, id } = await params;
 
     if (type !== 'user' && type !== 'form') {
       return NextResponse.json({ message: 'Invalid image type' }, { status: 400 });
@@ -20,7 +20,7 @@ export async function GET(
       return NextResponse.json({ message: 'Image not found' }, { status: 404 });
     }
 
-    return new NextResponse(image.data, {
+    return new NextResponse(new Uint8Array(image.data), {
       headers: {
         'Content-Type': image.mimeType,
         'Cache-Control': 'public, max-age=31536000, immutable',

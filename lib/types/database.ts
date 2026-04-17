@@ -42,6 +42,7 @@ export interface User {
 export interface Form {
   id: string;
   user_id: string;
+  owner_email?: string | null;
   title: string;
   description?: string;
   theme_color: string;
