@@ -29,7 +29,7 @@ const validateEnvironment = () => {
 // Validate environment variables at startup
 validateEnvironment();
 
-// Get the base URL for NextAuth and set it in environment
+// Get the base URL for NextAuth, preferring the configured deployment URL.
 const getBaseUrl = () => {
   if (process.env.NEXTAUTH_URL) {
     return process.env.NEXTAUTH_URL;
@@ -37,17 +37,14 @@ const getBaseUrl = () => {
   
   if (process.env.REPLIT_DEV_DOMAIN) {
     const url = `https://${process.env.REPLIT_DEV_DOMAIN}`;
-    process.env.NEXTAUTH_URL = url;
     return url;
   }
   
-  const url = process.env.NEXT_PUBLIC_API_URL_LOCAL || 'http://localhost:5000';
-  process.env.NEXTAUTH_URL = url;
-  return url;
+  return 'http://localhost:4000';
 };
 
-// Initialize NEXTAUTH_URL
-getBaseUrl();
+// Ensure NextAuth always has a base URL to work with.
+process.env.NEXTAUTH_URL = getBaseUrl();
 
 export const authOptions: AuthOptions = {
   providers: [
