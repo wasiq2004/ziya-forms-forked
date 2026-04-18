@@ -38,3 +38,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+stage-restart.out.log
+stage-restart.err.log
+lib/mysql/schema.sql
