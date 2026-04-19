@@ -11,6 +11,8 @@ export function getApiUrl(path: string) {
     return normalizedPath;
   }
 
+  // Keep `/api/...` requests stable whether the configured base already ends
+  // in `/api` or points at the origin root.
   if (API_BASE_URL.endsWith('/api') && normalizedPath.startsWith('/api/')) {
     return `${API_BASE_URL}${normalizedPath.slice('/api'.length)}`;
   }

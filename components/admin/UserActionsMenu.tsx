@@ -46,6 +46,7 @@ export function UserActionsMenu({
 
   useLayoutEffect(() => {
     if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMenuPosition(null);
       return;
     }

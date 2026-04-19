@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ImageCropPicker } from '@/components/forms/ImageCropPicker';
 import { getInitials } from '@/lib/utils';
+import { apiFetch } from '@/lib/api';
 import { ArrowLeft, CalendarDays, Mail, Shield, Sparkles } from 'lucide-react';
 
 type ProfileData = {
@@ -40,7 +41,7 @@ export default function ProfilePage() {
 
     const loadProfile = async () => {
       try {
-        const response = await fetch('/api/users/me');
+        const response = await apiFetch('/api/users/me');
         const data = await response.json();
 
         if (!response.ok) {
@@ -68,7 +69,7 @@ export default function ProfilePage() {
 
     setIsSaving(true);
     try {
-      const response = await fetch('/api/users/me', {
+      const response = await apiFetch('/api/users/me', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

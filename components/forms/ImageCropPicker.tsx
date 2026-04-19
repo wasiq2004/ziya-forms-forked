@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { Button } from '@/components/ui/Button';
+import { apiFetch } from '@/lib/api';
 import { Upload, X, Move, Trash2 } from 'lucide-react';
 
 type CropPoint = { x: number; y: number };
@@ -243,7 +244,7 @@ export function ImageCropPicker({
         payload.append('previousUrl', previewImage);
       }
 
-      const response = await fetch('/api/uploads/image', {
+      const response = await apiFetch('/api/uploads/image', {
         method: 'POST',
         body: payload,
       });

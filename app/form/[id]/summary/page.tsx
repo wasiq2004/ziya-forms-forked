@@ -8,6 +8,7 @@ import type { FormWithQuestions, ResponseWithAnswers } from '@/lib/types/databas
 import { BarChart3, ArrowLeft } from 'lucide-react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { GRADIENT_COLORS } from '@/lib/config';
+import { apiFetch } from '@/lib/api';
 
 export default function PublicSummaryPage() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function PublicSummaryPage() {
 
   const fetchSummary = async () => {
     try {
-      const response = await fetch(`/api/forms/${formId}/summary`);
+      const response = await apiFetch(`/api/forms/${formId}/summary`);
       const data = await response.json();
 
       if (!response.ok) {

@@ -13,6 +13,7 @@ import { ImageCropPicker } from '@/components/forms/ImageCropPicker';
 import type { Form, Question } from '@/lib/types/database';
 import { FormSettingsModal } from '@/components/forms/FormSettingsModal';
 import { normalizeFormSettings } from '@/lib/form-settings';
+import { apiFetch } from '@/lib/api';
 
 export default function FormEditPage() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function FormEditPage() {
 
   const fetchForm = async () => {
     try {
-      const response = await fetch(`/api/forms/${formId}`);
+      const response = await apiFetch(`/api/forms/${formId}`);
       const data = await response.json();
       
       if (!response.ok) {
@@ -94,7 +95,7 @@ export default function FormEditPage() {
     setIsSaving(true);
     try {
       // Update form metadata
-      const formResponse = await fetch(`/api/forms/${formId}`, {
+      const formResponse = await apiFetch(`/api/forms/${formId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -114,7 +115,7 @@ export default function FormEditPage() {
       }
 
       // Update questions
-      const questionsResponse = await fetch(`/api/forms/${formId}/questions`, {
+      const questionsResponse = await apiFetch(`/api/forms/${formId}/questions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questions }),
@@ -142,7 +143,7 @@ export default function FormEditPage() {
     setForm(prev => prev ? { ...prev, is_published: newPublishState } : null);
     
     try {
-      const response = await fetch(`/api/forms/${formId}`, {
+      const response = await apiFetch(`/api/forms/${formId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

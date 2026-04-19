@@ -10,6 +10,7 @@ import { CheckCircle, BarChart3, PencilLine, Repeat2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useFormDraftAutosave } from '@/lib/useFormDraftAutosave';
 import { shouldShowRespondentEmailField, requiresRespondentEmail } from '@/lib/form-settings';
+import { apiFetch } from '@/lib/api';
 
 export default function FormViewPage() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function FormViewPage() {
         ? `/api/forms/${formId}`
         : `/api/forms/${formId}/public`;
 
-      const response = await fetch(endpoint);
+      const response = await apiFetch(endpoint);
       const data = await response.json();
 
       if (!response.ok) {
@@ -73,7 +74,7 @@ export default function FormViewPage() {
 
   const hydrateEditableResponse = async (token: string) => {
     try {
-      const response = await fetch(`/api/forms/${formId}/response/${token}`);
+      const response = await apiFetch(`/api/forms/${formId}/response/${token}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -159,7 +160,7 @@ export default function FormViewPage() {
         ? `/api/forms/${formId}/submit`
         : `/api/forms/${formId}/submit/public`;
 
-      const response = await fetch(endpoint, {
+      const response = await apiFetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -214,7 +215,7 @@ export default function FormViewPage() {
         <div className="text-center">
           <h1 className="mb-4 text-2xl font-bold text-[color:var(--foreground)]">Form Not Found</h1>
           <p className="text-[color:var(--muted-foreground)]">
-            The form you're looking for doesn't exist or is no longer available.
+            The form you&apos;re looking for doesn&apos;t exist or is no longer available.
           </p>
         </div>
       </div>

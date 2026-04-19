@@ -10,6 +10,7 @@ import { Plus, FileText, Trash2, Edit, BarChart3, Copy, ExternalLink } from 'luc
 import Link from 'next/link';
 import type { Form, TemplateForm } from '@/lib/types/database';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { apiFetch } from '@/lib/api';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function DashboardPage() {
 
   const fetchForms = async () => {
     try {
-      const response = await fetch('/api/forms');
+      const response = await apiFetch('/api/forms');
       const data = await response.json();
       setForms(data.forms || []);
     } catch (error) {
@@ -57,7 +58,7 @@ export default function DashboardPage() {
 
   const fetchTemplates = async () => {
     try {
-      const response = await fetch('/api/templates');
+      const response = await apiFetch('/api/templates');
       const data = await response.json();
       setTemplates(data.templates || []);
     } catch (error) {
@@ -69,7 +70,7 @@ export default function DashboardPage() {
   const createNewForm = async () => {
     setIsCreating(true);
     try {
-      const response = await fetch('/api/forms', {
+      const response = await apiFetch('/api/forms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -92,7 +93,7 @@ export default function DashboardPage() {
   const createFromTemplate = async (templateId: string) => {
     setIsCreating(true);
     try {
-      const response = await fetch('/api/forms', {
+      const response = await apiFetch('/api/forms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -115,7 +116,7 @@ export default function DashboardPage() {
     if (!confirm('Are you sure you want to delete this form?')) return;
     
     try {
-      const response = await fetch(`/api/forms/${formId}`, {
+      const response = await apiFetch(`/api/forms/${formId}`, {
         method: 'DELETE',
       });
       

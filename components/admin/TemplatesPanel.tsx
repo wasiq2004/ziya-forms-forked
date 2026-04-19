@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import type { QuestionType, TemplateForm } from '@/lib/types/database';
+import { apiFetch } from '@/lib/api';
 import {
   AlignLeft,
   CheckSquare,
@@ -134,7 +135,7 @@ export function TemplatesPanel() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/admin/templates');
+      const response = await apiFetch('/api/admin/templates');
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Failed to load templates');
       setTemplates(data.templates || []);
@@ -235,7 +236,7 @@ export function TemplatesPanel() {
     setSaving(true);
     setError('');
     try {
-      const response = await fetch(editingId ? `/api/admin/templates/${editingId}` : '/api/admin/templates', {
+      const response = await apiFetch(editingId ? `/api/admin/templates/${editingId}` : '/api/admin/templates', {
         method: editingId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: form.title, description: form.description, category: form.category, questions: form.questions, is_active: true }),
@@ -255,7 +256,7 @@ export function TemplatesPanel() {
   const toggleTemplate = async (template: TemplateForm) => {
     setSaving(true);
     try {
-      const response = await fetch(`/api/admin/templates/${template.id}`, {
+      const response = await apiFetch(`/api/admin/templates/${template.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_active: !template.is_active }),
@@ -275,7 +276,7 @@ export function TemplatesPanel() {
     if (!confirm(`Delete template"${template.title}"?`)) return;
     setSaving(true);
     try {
-      const response = await fetch(`/api/admin/templates/${template.id}`, { method: 'DELETE' });
+      const response = await apiFetch(`/api/admin/templates/${template.id}`, { method: 'DELETE' });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Failed to delete template');
       setNotice('Template deleted.');

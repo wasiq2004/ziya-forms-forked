@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { useSession, signOut } from 'next-auth/react';
 import { getInitials } from '@/lib/utils';
+import { apiFetch } from '@/lib/api';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/components/ui/ThemeProvider';
 
@@ -14,20 +15,9 @@ export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const homeHref = session?.user?.role === 'super_admin' ? '/admin/dashboard' : session ? '/dashboard' : '/';
   const [avatarUrl, setAvatarUrl] = useState<string | null>(session?.user?.avatarUrl || null);
-  const [displayName, setDisplayName] = useState<string>(session?.user?.name || session?.user?.email || 'Profile');
-  const [avatarError, setAvatarError] = useState(false);
-
-  useEffect(() => {
-    setDisplayName(session?.user?.name || session?.user?.email || 'Profile');
-  }, [session?.user?.email, session?.user?.name]);
-
-  useEffect(() => {
-    setAvatarError(false);
-  }, [avatarUrl]);
 
   useEffect(() => {
     if (!session) {
-      setAvatarUrl(null);
       return;
     }
 
@@ -35,7 +25,7 @@ export default function Header() {
 
     const loadProfileAvatar = async () => {
       try {
-        const response = await fetch('/api/users/me', { credentials: 'include' });
+        const response = await apiFetch('/api/users/me', { credentials: 'include' });
         if (!response.ok) {
           return;
         }
@@ -64,6 +54,26 @@ export default function Header() {
       window.removeEventListener('profile-updated', handleProfileUpdated);
     };
   }, [session]);
+
+  const displayName = session?.user?.name || session?.user?.email || 'Profile';
+
+  function AvatarImage({ src, alt }: { src: string; alt: string }) {
+    const [failed, setFailed] = useState(false);
+
+    if (failed) {
+      return null;
+    }
+
+    return (
+      <img
+        key={src}
+        src={src}
+        alt={alt}
+        className="h-full w-full object-cover"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: '/auth/login' });
@@ -101,13 +111,8 @@ export default function Header() {
                 className="flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-[color:var(--background)] px-2 py-2 text-[color:var(--foreground)] transition hover:bg-[color:var(--muted)]/70 hover:border-[color:var(--primary)] /5 /90 dark:hover:bg-[color:var(--card)]/10 sm:px-3"
               >
                 <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-[color:var(--primary)] text-white">
-                  {avatarUrl && !avatarError ? (
-                    <img
-                      src={avatarUrl}
-                      alt={displayName}
-                      className="h-full w-full object-cover"
-                      onError={() => setAvatarError(true)}
-                    />
+                  {avatarUrl ? (
+                    <AvatarImage src={avatarUrl} alt={displayName} />
                   ) : (
                     <span className="text-sm font-semibold">
                       {session.user?.name ? getInitials(session.user.name) : session.user?.email?.[0]?.toUpperCase()}

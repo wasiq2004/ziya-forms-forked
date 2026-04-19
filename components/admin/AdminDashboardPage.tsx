@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import type { AdminDashboardStats, AdminUserSummary } from '@/lib/types/database';
+import { apiFetch } from '@/lib/api';
 import { KpiCards } from './KpiCards';
 import { SearchBar } from './SearchBar';
 import { Filters } from './Filters';
@@ -46,7 +47,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
     const loadStats = async () => {
       setLoadingStats(true);
       try {
-        const response = await fetch('/api/admin/dashboard/stats');
+        const response = await apiFetch('/api/admin/dashboard/stats');
         const data = await response.json();
 
         if (!response.ok) {
@@ -89,7 +90,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
           status,
         });
 
-        const response = await fetch(`/api/admin/users?${params.toString()}`, {
+        const response = await apiFetch(`/api/admin/users?${params.toString()}`, {
           signal: controller.signal,
         });
         const data = await response.json();
@@ -136,8 +137,8 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
     try {
       const [statsResponse, usersResponse] = await Promise.all([
-        fetch('/api/admin/dashboard/stats'),
-        fetch(`/api/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}&status=${encodeURIComponent(status)}`),
+        apiFetch('/api/admin/dashboard/stats'),
+        apiFetch(`/api/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}&status=${encodeURIComponent(status)}`),
       ]);
 
       const statsData = await statsResponse.json();
@@ -182,7 +183,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
     setBusyAction(true);
     try {
-      const response = await fetch(`/api/admin/users/${user.id}/status`, {
+      const response = await apiFetch(`/api/admin/users/${user.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: nextStatus }),
@@ -211,7 +212,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
     setBusyAction(true);
     try {
-      const response = await fetch(`/api/admin/users/${user.id}/plan`, {
+      const response = await apiFetch(`/api/admin/users/${user.id}/plan`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ billingPlan: nextBillingPlan }),
@@ -238,7 +239,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
     setBusyAction(true);
     try {
-      const response = await fetch(`/api/admin/users/${user.id}`, {
+      const response = await apiFetch(`/api/admin/users/${user.id}`, {
         method: 'DELETE',
       });
       const data = await response.json();
@@ -263,7 +264,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
     setBusyAction(true);
     try {
-      const response = await fetch(`/api/admin/users/${user.id}/reset-password`, {
+      const response = await apiFetch(`/api/admin/users/${user.id}/reset-password`, {
         method: 'POST',
       });
       const data = await response.json();
@@ -287,7 +288,7 @@ export function AdminDashboardPage({ currentUserName }: AdminDashboardPageProps)
 
     setBusyAction(true);
     try {
-      const response = await fetch(`/api/admin/users/${activeUser.id}`, {
+      const response = await apiFetch(`/api/admin/users/${activeUser.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editingState),

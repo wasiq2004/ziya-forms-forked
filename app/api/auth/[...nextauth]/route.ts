@@ -8,19 +8,11 @@ import { ensureSuperAdminAccount } from '@/lib/mysql/bootstrap-admin';
 // Environment variable validation
 const validateEnvironment = () => {
   const errors = [];
-  
+
   if (!process.env.NEXTAUTH_SECRET) {
     errors.push('NEXTAUTH_SECRET is not set');
   }
-  
-  if (!process.env.GOOGLE_CLIENT_ID) {
-    errors.push('GOOGLE_CLIENT_ID is not set');
-  }
-  
-  if (!process.env.GOOGLE_CLIENT_SECRET) {
-    errors.push('GOOGLE_CLIENT_SECRET is not set');
-  }
-  
+
   if (errors.length > 0) {
     throw new Error(`Missing environment variables: ${errors.join(', ')}`);
   }
@@ -45,6 +37,10 @@ const getBaseUrl = () => {
 
 // Ensure NextAuth always has a base URL to work with.
 process.env.NEXTAUTH_URL = getBaseUrl();
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const googleProviderEnabled = !!googleClientId && !!googleClientSecret;
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -106,17 +102,21 @@ export const authOptions: AuthOptions = {
         }
       }
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code"
-        }
-      }
-    })
+    ...(googleProviderEnabled
+      ? [
+          GoogleProvider({
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
+            authorization: {
+              params: {
+                prompt: 'consent',
+                access_type: 'offline',
+                response_type: 'code',
+              },
+            },
+          }),
+        ]
+      : [])
   ],
   session: {
     strategy: 'jwt',

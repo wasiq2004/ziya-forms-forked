@@ -107,6 +107,7 @@ export function FormSettingsModal({ open, settings, onClose, onSave }: FormSetti
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDraft(normalizeFormSettings(settings));
     }
   }, [open, settings]);

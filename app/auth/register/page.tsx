@@ -9,6 +9,7 @@ import { Chrome, ShieldCheck, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { useTheme } from '@/components/ui/ThemeProvider';
+import { apiFetch } from '@/lib/api';
 
 export default function RegisterPage() {
   const { theme } = useTheme();
@@ -39,7 +40,7 @@ export default function RegisterPage() {
     setSuccess(false);
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await apiFetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

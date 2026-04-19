@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import type { SmtpSettings } from '@/lib/types/database';
+import { apiFetch } from '@/lib/api';
 import { Mail, LockKeyhole, RefreshCcw } from 'lucide-react';
 
 export function SmtpPanel() {
@@ -26,7 +27,7 @@ export function SmtpPanel() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/admin/smtp');
+      const response = await apiFetch('/api/admin/smtp');
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || 'Failed to load SMTP settings');
@@ -61,7 +62,7 @@ export function SmtpPanel() {
         secure: form.secure,
       };
 
-      const response = await fetch('/api/admin/smtp', {
+      const response = await apiFetch('/api/admin/smtp', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(trimmedForm),

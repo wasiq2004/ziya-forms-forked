@@ -10,6 +10,7 @@ import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Toolti
 import type { FormWithQuestions, ResponseWithAnswers } from '@/lib/types/database';
 import { GRADIENT_COLORS } from '@/lib/config';
 import FormHeader from '@/components/ui/FormHeader';
+import { apiFetch, getApiUrl } from '@/lib/api';
 
 type SourceFilter = 'all' | 'direct' | 'embed';
 
@@ -48,8 +49,8 @@ export default function ResponsesPage() {
   const fetchData = async () => {
     try {
       const [formRes, responsesRes] = await Promise.all([
-        fetch(`/api/forms/${formId}`),
-        fetch(`/api/responses/${formId}`),
+        apiFetch(`/api/forms/${formId}`),
+        apiFetch(`/api/responses/${formId}`),
       ]);
 
       const formData = await formRes.json();
@@ -119,7 +120,7 @@ export default function ResponsesPage() {
   };
 
   const exportToExcel = () => {
-    window.open(`/api/responses/${formId}/export`, '_blank');
+    window.open(getApiUrl(`/api/responses/${formId}/export`), '_blank');
   };
 
   const getQuestionStats = (questionId: string) => {

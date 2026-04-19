@@ -8,7 +8,9 @@
     "start": "node scripts/start.js",
     "start:local": "node scripts/start-local.js",
     "start:stage": "node scripts/start-stage.js",
-    "lint": "next lint",
+    "ui:stage": "node scripts/start-stage.js",
+    "api:stage": "node scripts/start-api-stage.js",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

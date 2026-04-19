@@ -203,7 +203,7 @@ export default function LoginPage() {
           </Button>
 
           <div className="mt-6 rounded-2xl bg-[color:var(--background)] px-4 py-3 text-center text-sm text-[color:var(--muted-foreground)] /60">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/auth/register" className="font-semibold text-[color:var(--primary)] hover:underline">
               Create one
             </Link>

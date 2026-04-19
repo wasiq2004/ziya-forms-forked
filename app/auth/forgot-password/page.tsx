@@ -7,6 +7,7 @@ import { ArrowLeft, Sparkles, ShieldCheck, Loader, Eye, EyeOff } from 'lucide-re
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { useTheme } from '@/components/ui/ThemeProvider';
+import { apiFetch } from '@/lib/api';
 
 type Step = 'email' | 'otp' | 'password' | 'success';
 
@@ -28,7 +29,7 @@ export default function ForgotPasswordPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/forgot-password', {
+      const response = await apiFetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -55,7 +56,7 @@ export default function ForgotPasswordPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/verify-otp', {
+      const response = await apiFetch('/api/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),
@@ -93,7 +94,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await apiFetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, newPassword }),

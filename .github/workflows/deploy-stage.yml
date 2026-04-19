@@ -8,6 +8,13 @@ on:
 jobs:
   build-images:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: ziya-forms-ui
+            file: ./Dockerfile.ui
+          - name: ziya-forms-api
+            file: ./Dockerfile.api
 
     steps:
       - name: Checkout code
@@ -27,12 +34,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push UI
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile.ui 
+          file: ${{ matrix.file }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ziya-forms:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.name }}:latest
 
 
