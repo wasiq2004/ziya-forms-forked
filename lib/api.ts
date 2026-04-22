@@ -1,24 +1,6 @@
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+import { getApiUrl } from '@/lib/endpoints';
 
-function normalizePath(path: string) {
-  return path.startsWith('/') ? path : `/${path}`;
-}
-
-export function getApiUrl(path: string) {
-  const normalizedPath = normalizePath(path);
-
-  if (!API_BASE_URL) {
-    return normalizedPath;
-  }
-
-  // Keep `/api/...` requests stable whether the configured base already ends
-  // in `/api` or points at the origin root.
-  if (API_BASE_URL.endsWith('/api') && normalizedPath.startsWith('/api/')) {
-    return `${API_BASE_URL}${normalizedPath.slice('/api'.length)}`;
-  }
-
-  return `${API_BASE_URL}${normalizedPath}`;
-}
+export { getApiUrl };
 
 export function apiFetch(path: string, init?: RequestInit) {
   return fetch(getApiUrl(path), init);

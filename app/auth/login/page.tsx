@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { getSession, signIn, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { Chrome, ShieldCheck, Sparkles, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
@@ -29,12 +29,7 @@ export default function LoginPage() {
       return;
     }
 
-    const redirectAuthenticatedUser = async () => {
-      const currentSession = session ?? (await getSession());
-      router.replace(getDestinationForRole(currentSession?.user?.role));
-    };
-
-    void redirectAuthenticatedUser();
+    router.replace(getDestinationForRole(session?.user?.role));
   }, [session, status, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -55,8 +50,7 @@ export default function LoginPage() {
       }
 
       if (result?.ok) {
-        const currentSession = await getSession();
-        router.replace(getDestinationForRole(currentSession?.user?.role));
+        router.replace('/dashboard');
         return;
       }
 

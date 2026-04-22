@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 4000
 
 #Run UI
-CMD ["npm","run","ui:stage"]
+CMD ["npm","run","start:stage"]
