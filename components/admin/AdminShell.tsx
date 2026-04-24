@@ -38,7 +38,7 @@ export function AdminShell({ currentUserName, children }: AdminShellProps) {
                     href={item.href}
                     className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
                       active
-                        ? 'bg-[color:var(--background)] text-white shadow-lg shadow-slate-900/20'
+                        ? 'bg-[color:var(--background)] text-blue shadow-lg shadow-slate-900/20'
                         : 'text-[color:var(--muted-foreground)] hover:bg-[color:var(--muted)]  dark:hover:bg-[color:var(--background)]/70'
                     }`}
                   >

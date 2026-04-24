@@ -25,7 +25,7 @@ type ProfileData = {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -85,6 +85,12 @@ export default function ProfilePage() {
 
       setProfile(data.user || profile);
       window.dispatchEvent(new Event('profile-updated'));
+      
+      // Refresh the session to update avatarUrl in session data
+      await update({
+        avatarUrl: data.user?.avatar_url || null,
+      });
+      
       router.refresh();
     } catch (error) {
       console.error('Failed to save profile:', error);

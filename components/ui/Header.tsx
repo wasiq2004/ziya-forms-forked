@@ -18,6 +18,7 @@ export default function Header() {
 
   useEffect(() => {
     if (!session) {
+      setAvatarUrl(null);
       return;
     }
 
@@ -27,15 +28,17 @@ export default function Header() {
       try {
         const response = await apiFetch('/api/users/me', { credentials: 'include' });
         if (!response.ok) {
-          return;
+          throw new Error('Failed to fetch profile');
         }
 
         const data = await response.json();
         if (!cancelled) {
-          setAvatarUrl(data.user?.avatar_url || session.user?.avatarUrl || null);
+          setAvatarUrl(data.user?.avatar_url || null);
         }
-      } catch {
+      } catch (error) {
+        console.error('Failed to load profile avatar:', error);
         if (!cancelled) {
+          // Fallback to session avatarUrl if API fails
           setAvatarUrl(session.user?.avatarUrl || null);
         }
       }
@@ -53,7 +56,7 @@ export default function Header() {
       cancelled = true;
       window.removeEventListener('profile-updated', handleProfileUpdated);
     };
-  }, [session]);
+  }, [session, session?.user?.avatarUrl]);
 
   const displayName = session?.user?.name || session?.user?.email || 'Profile';
 

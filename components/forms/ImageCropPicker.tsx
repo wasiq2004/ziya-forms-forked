@@ -21,6 +21,7 @@ type ImageCropPickerProps = {
   cropHint?: string;
   previewClassName?: string;
   className?: string;
+  transparentBackground?: boolean;
 };
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
@@ -39,6 +40,7 @@ export function ImageCropPicker({
   cropHint = 'Drag to move, use the slider to zoom, then save.',
   previewClassName = '',
   className = '',
+  transparentBackground = false,
 }: ImageCropPickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -208,6 +210,15 @@ export function ImageCropPicker({
         throw new Error('Unable to crop image');
       }
 
+      // Check if the source image is PNG (likely has transparency)
+      const isPngSource = sourceImage?.startsWith('data:image/png') || false;
+
+      // If transparent background is requested or source is PNG, preserve transparency
+      if (transparentBackground || isPngSource) {
+        // Clear canvas to transparent (don't fill with any background)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
       const scale = baseScale * zoom;
       const sourceX = clamp((-pan.x) / scale, 0, image.naturalWidth);
       const sourceY = clamp((-pan.y) / scale, 0, image.naturalHeight);
@@ -226,8 +237,13 @@ export function ImageCropPicker({
         canvas.height
       );
 
+      // Use PNG format for transparent images, JPEG for others
+      const mimeType = (transparentBackground || isPngSource) ? 'image/png' : 'image/jpeg';
+      const fileExtension = (transparentBackground || isPngSource) ? 'png' : 'jpg';
+      const quality = (transparentBackground || isPngSource) ? undefined : 0.92;
+
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((nextBlob) => resolve(nextBlob), 'image/jpeg', 0.92);
+        canvas.toBlob((nextBlob) => resolve(nextBlob), mimeType, quality);
       });
 
       if (!blob) {
@@ -235,7 +251,7 @@ export function ImageCropPicker({
       }
 
       const payload = new FormData();
-      payload.append('file', new File([blob], 'crop.jpg', { type: 'image/jpeg' }));
+      payload.append('file', new File([blob], `crop.${fileExtension}`, { type: mimeType }));
       payload.append('scope', uploadScope);
       if (entityId) {
         payload.append('entityId', entityId);
@@ -282,7 +298,8 @@ export function ImageCropPicker({
 
       <div
         className={[
-          'relative overflow-hidden border border-dashed border-[color:var(--border)]  bg-[color:var(--background)]/60',
+          'relative overflow-hidden border border-dashed border-[color:var(--border)]',
+          transparentBackground ? '' : 'bg-[color:var(--background)]/60',
           previewClassName,
         ].join(' ')}
         style={{ aspectRatio }}

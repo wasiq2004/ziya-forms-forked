@@ -112,8 +112,9 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="relative z-10 max-w-3xl mx-auto"
             >
-              <h2 className="text-4xl md:text-6xl font-black mb-8 text-white leading-tight">
-                Stop Designing Forms.<br />Start Building Experiences.
+              <h2 className="text-4xl md:text-5xl font-black mb-8 text-white leading-tight">
+                Stop Designing Forms.<br />
+                Start Building Experiences.
               </h2>
               <p className="text-xl mb-12 text-blue-50 font-medium opacity-90 leading-relaxed">
                 Join thousands of creators who transformed their data collection with Ziya Forms.
@@ -143,7 +144,7 @@ export default function HomePage() {
               <ul className="space-y-4 text-[color:var(--muted-foreground)]">
                 <li><Link href="https://ziyasuite.com" className="hover:text-[color:var(--primary)] transition-colors">Ziya Voice</Link></li>
                 <li><Link href="#" className="hover:text-[color:var(--primary)] transition-colors">Ziya CRM</Link></li>
-                <li><Link href="#" className="hover:text-[color:var(--primary)] transition-colors">Ziya Ads</Link></li>
+                <li><Link href="#" className="hover:text-[color:var(--primary)] transition-colors">Ziya Chat</Link></li>
               </ul>
             </div>
             <div>

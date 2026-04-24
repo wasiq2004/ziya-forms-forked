@@ -344,7 +344,7 @@ export default function FormEditPage() {
               </p>
           </div>
           
-          <div className="relative bg-[color:var(--muted)] overflow-hidden">
+          <div className="relative overflow-hidden">
             <ImageCropPicker
               label=""
               description=""
@@ -359,6 +359,7 @@ export default function FormEditPage() {
               uploadScope="forms/banners"
               entityId={formId}
               className="px-8 pb-8"
+              transparentBackground={true}
             />
           </div>
 

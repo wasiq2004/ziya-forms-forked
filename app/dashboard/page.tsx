@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { motion } from 'framer-motion';
-import { Plus, FileText, Trash2, Edit, BarChart3, Copy, ExternalLink } from 'lucide-react';
+import { Plus, FileText, Trash2, Edit, BarChart3, Copy, ExternalLink, Search, X } from 'lucide-react';
 import Link from 'next/link';
 import type { Form, TemplateForm } from '@/lib/types/database';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -19,6 +19,7 @@ export default function DashboardPage() {
   const [templates, setTemplates] = useState<TemplateForm[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -138,6 +139,16 @@ export default function DashboardPage() {
     alert('Form link copied to clipboard!');
   };
 
+  const filteredForms = forms.filter(form =>
+    form.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    form.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredTemplates = templates.filter(template =>
+    template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    template.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const publishedFormsCount = forms.filter((form) => form.is_published).length;
 
   if (status === 'loading' || isLoading) {
@@ -220,6 +231,28 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Search Bar */}
+        <div className="mb-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[color:var(--muted-foreground)]" />
+            <input
+              type="text"
+              placeholder="Search forms and templates..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] py-3 pl-13 pr-4 text-[color:var(--foreground)] placeholder:text-[color:var(--muted-foreground)] focus:border-[color:var(--primary)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary)]/20 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)] transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+        </div>
+
         {forms.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -244,9 +277,33 @@ export default function DashboardPage() {
               Create Your First Form
             </Button>
           </motion.div>
+        ) : filteredForms.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-20"
+          >
+            <div className="w-24 h-24 bg-[color:var(--muted)] rounded-full flex items-center justify-center mx-auto mb-6">
+              <Search className="w-12 h-12 text-[color:var(--muted-foreground)]" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-[color:var(--foreground)]">
+              No forms found
+            </h3>
+            <p className="text-[color:var(--muted-foreground)] mb-8 max-w-md mx-auto">
+              Try adjusting your search criteria to find what you&apos;re looking for.
+            </p>
+            <Button
+              onClick={() => setSearchQuery('')}
+              variant="outline"
+              className="border-[color:var(--border)] text-[color:var(--foreground)]"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Clear Search
+            </Button>
+          </motion.div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {forms.map((form, index) => (
+            {filteredForms.map((form, index) => (
               <Card
               key={form.id}
               hover
@@ -327,9 +384,24 @@ export default function DashboardPage() {
               Start with pre-built templates to save time
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {templates.map((template) => (
-              <Card key={template.id} hover className="relative bg-[color:var(--card)] border border-[color:var(--border)] shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+          {filteredTemplates.length === 0 && templates.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-12"
+            >
+              <Search className="w-12 h-12 text-[color:var(--muted-foreground)] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-[color:var(--foreground)]">
+                No templates match your search
+              </h3>
+              <p className="text-[color:var(--muted-foreground)]">
+                Try adjusting your search criteria
+              </p>
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredTemplates.map((template) => (
+                <Card key={template.id} hover className="relative bg-[color:var(--card)] border border-[color:var(--border)] shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                 <div className="p-6">
                   <div className="w-12 h-12 bg-[color:var(--muted)] rounded-xl flex items-center justify-center mb-4">
                     <FileText className="w-6 h-6 text-[color:var(--icon-blue)]" />
@@ -357,7 +429,8 @@ export default function DashboardPage() {
                 </div>
               </Card>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

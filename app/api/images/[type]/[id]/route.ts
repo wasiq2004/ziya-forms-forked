@@ -20,12 +20,8 @@ export async function GET(
       return NextResponse.json({ message: 'Image not found' }, { status: 404 });
     }
 
-    return new NextResponse(new Uint8Array(image.data), {
-      headers: {
-        'Content-Type': image.mimeType,
-        'Cache-Control': 'public, max-age=31536000, immutable',
-      },
-    });
+    // Redirect to Cloudinary URL for backward compatibility
+    return NextResponse.redirect(image.url, { status: 302 });
   } catch (error) {
     console.error('Error retrieving image:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });

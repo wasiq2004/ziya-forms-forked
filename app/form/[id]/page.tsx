@@ -332,52 +332,47 @@ export default function FormViewPage() {
           </div>
         )}
 
-        <div className="mb-6 overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_24px_60px_rgba(15,23,42,0.1)]">
+        <div className="mb-6 text-center">
           {form.banner_url ? (
-            <div className="h-56 w-full overflow-hidden bg-[color:var(--background)]">
-              <img src={form.banner_url} alt={form.title} className="h-full w-full object-cover" />
+            <div className="mb-6 w-full overflow-hidden rounded-3xl">
+              <img src={form.banner_url} alt={form.title} className="w-full object-cover" />
             </div>
           ) : (
             <div
-              className="h-3 w-full"
+              className="mb-6 h-3 w-full rounded-full"
               style={{ background: `linear-gradient(90deg, ${form.theme_color || '#2563eb'}, #0ea5e9)` }}
             />
           )}
 
-          <div className="p-8">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[color:var(--muted)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--primary)]">
-              External form
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-[color:var(--foreground)]">
-              {form.title}
-            </h1>
-            {form.description && (
-              <p className="mt-3 text-[color:var(--muted-foreground)]">
-                {form.description}
-              </p>
-            )}
+          <h1 className="mx-auto max-w-3xl text-3xl font-bold tracking-tight text-[color:var(--foreground)]">
+            {form.title}
+          </h1>
+          {form.description && (
+            <p className="mt-3 text-[color:var(--muted-foreground)]">
+              {form.description}
+            </p>
+          )}
 
-            {shouldCollectEmail && (
-              <div className="mt-8">
-                <label htmlFor="email" className="mb-2 block text-sm font-medium text-[color:var(--muted-foreground)]">
-                  Your Email {isEmailRequired ? '(required)' : '(optional)'}
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={respondentEmail}
-                  onChange={(e) => setRespondentEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required={isEmailRequired}
-                />
-                {form.settings?.limit_to_one_response && (
-                  <p className="mt-2 text-xs text-[color:var(--muted-foreground)]">
-                    Email addresses are used to limit responses to one submission.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+          {shouldCollectEmail && (
+            <div className="mt-8 mx-auto w-full max-w-md text-left">
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-[color:var(--muted-foreground)]">
+                Your Email {isEmailRequired ? '(required)' : '(optional)'}
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={respondentEmail}
+                onChange={(e) => setRespondentEmail(e.target.value)}
+                placeholder="your@email.com"
+                required={isEmailRequired}
+              />
+              {form.settings?.limit_to_one_response && (
+                <p className="mt-2 text-xs text-[color:var(--muted-foreground)]">
+                  Email addresses are used to limit responses to one submission.
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

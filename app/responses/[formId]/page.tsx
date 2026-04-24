@@ -81,10 +81,10 @@ export default function ResponsesPage() {
     const latestResponse = filteredResponses[0];
 
     return [
-      { label: 'Total', value: filteredResponses.length.toString(), tone: 'bg-[color:var(--muted)] ' },
-      { label: 'Direct form', value: directResponses.length.toString(), tone: 'bg-[color:var(--status-success-light)] /15' },
-      { label: 'Embed code', value: embedResponses.length.toString(), tone: 'bg-[color:var(--background)] ' },
-      { label: 'Latest', value: latestResponse ? new Date(latestResponse.submitted_at).toLocaleDateString() : 'None', tone: 'bg-[color:var(--background)] ' },
+      { label: 'Total', value: filteredResponses.length.toString(), tone: 'bg-[color:var(--primary)]/10 text-[color:var(--primary)]' },
+      { label: 'Direct form', value: directResponses.length.toString(), tone: 'bg-[color:var(--primary)]/10 text-[color:var(--primary)]'},
+      { label: 'Embed code', value: embedResponses.length.toString(), tone: 'bg-[color:var(--primary)]/10 text-[color:var(--primary)]' },
+      { label: 'Latest', value: latestResponse ? new Date(latestResponse.submitted_at).toLocaleDateString() : 'None', tone: 'bg-[color:var(--primary)]/10 text-[color:var(--primary)]' },
     ];
   }, [directResponses.length, embedResponses.length, filteredResponses]);
 
@@ -186,10 +186,10 @@ export default function ResponsesPage() {
       <div className="container mx-auto max-w-7xl px-6 py-8">
         <div className="mb-6 grid gap-4 md:grid-cols-4">
           {statsSummary.map((item) => (
-            <Card key={item.label} className="border border-[color:var(--border)] bg-[color:var(--card)] shadow-lg">
-              <div className={`rounded-2xl ${item.tone} p-5`}>
-                <p className="text-sm font-medium text-[color:var(--muted-foreground)]">{item.label}</p>
-                <p className="mt-2 text-3xl font-bold tracking-tight text-[color:var(--foreground)]">{item.value}</p>
+            <Card key={item.label} className="border border-[color:var(--border)] bg-[color:var(--card)] shadow-lg overflow-hidden">
+              <div className={`rounded-2xl ${item.tone} p-5 h-full`}>
+                <p className="text-sm font-medium opacity-80">{item.label}</p>
+                <p className="mt-2 text-3xl font-bold tracking-tight">{item.value}</p>
               </div>
             </Card>
           ))}
@@ -222,10 +222,10 @@ export default function ResponsesPage() {
                 type="button"
                 onClick={() => setSourceFilter(filter)}
                 className={[
-                  'rounded-full px-4 py-2 text-sm font-medium transition',
+                  'rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
                   sourceFilter === filter
-                    ? 'bg-[color:var(--primary)] text-white '
-                    : 'text-[color:var(--muted-foreground)] hover:bg-[color:var(--muted)]/70  dark:hover:bg-[color:var(--muted)]',
+                    ? 'bg-[color:var(--primary)] text-white shadow-sm'
+                    : 'text-[color:var(--muted-foreground)] hover:bg-[color:var(--muted)] hover:text-[color:var(--foreground)] dark:hover:bg-[color:var(--muted)]/50',
                 ].join(' ')}
               >
                 {filter === 'all' ? 'All sources' : SOURCE_LABELS[filter]}
@@ -319,7 +319,7 @@ export default function ResponsesPage() {
                             return answer ? (
                               <div
                                 key={index}
-                                className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--background)] px-4 py-3 text-[color:var(--foreground)]"
+                                className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--muted)]/30 px-4 py-3 text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/50 transition-colors"
                               >
                                 {answer.answer_text || JSON.stringify(answer.answer_data || '')}
                               </div>
@@ -360,16 +360,16 @@ export default function ResponsesPage() {
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-[color:var(--muted)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">
+                      <span className="rounded-full bg-[color:var(--primary)]/10 text-[color:var(--primary)] px-3 py-1 text-xs font-semibold">
                         {SOURCE_LABELS[(response.submission_source || 'direct') as Exclude<SourceFilter, 'all'>]}
                       </span>
                       {response.quiz_score !== undefined && response.quiz_score !== null && (
-                        <span className="rounded-full bg-[color:var(--logo-gold)]/15 px-3 py-1 text-xs font-semibold text-[color:var(--logo-gold)]">
+                        <span className="rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 px-3 py-1 text-xs font-semibold">
                           {response.quiz_score}/{response.quiz_max_score ?? 0}
                         </span>
                       )}
                       {response.respondent_email && (
-                        <span className="rounded-full bg-[color:var(--status-success-light)] px-3 py-1 text-xs font-semibold text-[color:var(--status-success-text-light)] /15">
+                        <span className="rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-3 py-1 text-xs font-semibold">
                           {response.respondent_email}
                         </span>
                       )}
@@ -381,7 +381,7 @@ export default function ResponsesPage() {
                       const answer = response.answers?.find((a) => a.question_id === question.id);
 
                       return (
-                        <div key={question.id} className="rounded-2xl bg-[color:var(--background)] p-4">
+                        <div key={question.id} className="rounded-2xl bg-[color:var(--muted)]/30 border border-[color:var(--border)] p-4 hover:bg-[color:var(--muted)]/50 transition-colors">
                           <p className="text-sm font-semibold text-[color:var(--muted-foreground)]">
                             {question.title}
                           </p>

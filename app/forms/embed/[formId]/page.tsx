@@ -351,7 +351,7 @@ export default function FormEmbedPage() {
 
         <div className="mb-6 overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-[0_24px_60px_rgba(15,23,42,0.1)]">
           {form.banner_url ? (
-            <div className="h-52 w-full overflow-hidden bg-[color:var(--background)]">
+            <div className="h-52 w-full overflow-hidden">
               <img src={form.banner_url} alt={form.title} className="h-full w-full object-cover" />
             </div>
           ) : (

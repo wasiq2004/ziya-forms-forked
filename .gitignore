@@ -42,3 +42,4 @@ stage-restart.out.log
 stage-restart.err.log
 lib/mysql/schema.sql
 CODING_HANDOFF.md
+CLOUDINARY_IMPLEMENTATION.md

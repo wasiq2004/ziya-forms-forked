@@ -42,14 +42,14 @@ function ToggleSwitch({
         type="button"
         onClick={() => onChange(!checked)}
         className={[
-          'relative h-6 w-11 rounded-full transition-colors overflow-hidden shadow-sm',
+          'relative h-6 w-11 rounded-full transition-colors overflow-hidden',
           checked ? 'bg-[color:var(--primary)] ' : 'bg-[color:var(--border)] ',
         ].join(' ')}
       >
         <span
           className={[
-            'absolute top-0.5 h-5 w-5 rounded-full bg-[color:var(--card)] transition-transform',
-            checked ? 'translate-x-5' : 'translate-x-0.5',
+            'absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-[color:var(--card)] transition-transform duration-150 ease-out',
+            checked ? 'translate-x-5' : 'translate-x-0',
           ].join(' ')}
         />
       </button>
